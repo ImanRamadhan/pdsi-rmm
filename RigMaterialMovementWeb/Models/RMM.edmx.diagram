@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="1b4236cda69b480795178000b4423880" Name="Diagram1">
+        <EntityTypeShape EntityType="DB_RMMModel.M_Area" Width="1.5" PointX="5.75" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_RMMModel.M_FaktorKeterlambatan" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_RMMModel.M_Rig" Width="1.5" PointX="8" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_RMMModel.M_Role" Width="1.5" PointX="5.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_RMMModel.M_RoleManagement" Width="1.5" PointX="7.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_RMMModel.M_Status" Width="1.5" PointX="0.75" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_RMMModel.M_Transporter" Width="1.5" PointX="0.75" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_RMMModel.T_PermintaanPekerjaanDetail" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_RMMModel.T_RigMaterialMovement" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_RMMModel.T_RigMaterialMovementDetail" Width="1.5" PointX="5.25" PointY="1.375" IsExpanded="true" />
+        <AssociationConnector Association="DB_RMMModel.FK_M_Rig_M_Area" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_RMMModel.FK_T_RigMaterialMovement_M_Transporter" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_RMMModel.FK_T_RigMaterialMovementDetail_T_RigMaterialMovement" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DB_RMMModel.M_Approver" Width="1.5" PointX="10.375" PointY="3.75" />
+        <EntityTypeShape EntityType="DB_RMMModel.T_PermintaanPekerjaan" Width="1.5" PointX="3" PointY="5.875" />
+        <AssociationConnector Association="DB_RMMModel.FK_T_PermintaanPekerjaan_M_Status" />
+        <EntityTypeShape EntityType="DB_RMMModel.VW_AREA" Width="1.5" PointX="10.75" PointY="6.75" />
+        <EntityTypeShape EntityType="DB_RMMModel.VW_FAKTORKETERLAMBATAN" Width="1.5" PointX="10.75" PointY="9.75" />
+        <EntityTypeShape EntityType="DB_RMMModel.VW_RIG" Width="1.5" PointX="0.75" PointY="11.75" />
+        <EntityTypeShape EntityType="DB_RMMModel.VW_STATUS" Width="1.5" PointX="3.375" PointY="11.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

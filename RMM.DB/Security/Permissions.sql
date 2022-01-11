@@ -1,0 +1,6 @@
+﻿GRANT CONNECT TO [sa1];
+
+
+GO
+GRANT CONNECT TO [sa2];
+

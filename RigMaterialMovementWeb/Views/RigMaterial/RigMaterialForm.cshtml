@@ -1,0 +1,411 @@
+﻿@model List<RigMaterialMovementWeb.Models.RigMaterialMovementDetail>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Rig Movement/Mobilization Form</title>
+    <script src="~/Scripts/RigMaterialAndMobilization.js"></script>
+</head>
+<body>
+    <div>
+        <section class="content" style="padding-top:0px">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box box-info" style="border-top-color:#337ab7">
+                        <div class="box-header">
+                            <div class="form-horizontal">
+                                <button onclick="CreatePopUp()" type="button" class="btn btn-sm btn-success" style="background-color:#a6c218; border-color:#a6c218"><i class="glyphicon glyphicon-file"></i>Create New</button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <table class="table table-bordered table-striped" id="tblEngineeringEstimate">
+                                <thead>
+                                    <tr class="btn-primary">
+                                        <th>EmpId</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Job</th>
+                                        <th>EmpId</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Job</th>
+                                        <th>EmpId</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Job</th>
+                                    </tr>
+                                </thead>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+
+                                            <a class="btn btn-sm btn-default" onclick="OpenModal('EditRigMovement', '@item.id')"> <i class="glyphicon glyphicon-pencil" style="font-size:16px;cursor:pointer"></i> </a>
+                                            <a class="btn btn-sm btn-default" onclick="OpenModal('DeleteRigMovement', '@item.id')"> <i class="glyphicon glyphicon-trash" style="font-size:16px;cursor:pointer"></i> </a>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.trip_move_out)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.trip_move_in)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.kendala)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.tindaklanjut)
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <form id="formModalEngineeringEstimate" class="form-horizontal" name="formModalRig" method="post" action="">
+                <input type="hidden" name="id" id="id" />
+                @* Contract Number *@
+
+                @* Nilai *@
+                <div class="form-group">
+                    <label for="txtNilai" class="col-sm-2 control-label">Tanggal</label>
+                    <div class="col-sm-10">
+                        <input id="txttanggal" name="tanggal" class="form-control input-sm" type="text" />
+                    </div>
+                </div>
+                @*Date*@
+                <div class="form-group">
+                    <label for="txtDate" class="col-sm-2 control-label">Area</label>
+                    <div class="col-sm-10">
+                        <input id="txtarea" name="area" class="form-control input-sm" type="text" />
+                    </div>
+
+
+                </div>
+                <div class="form-group">
+                    <label for="txtDeskripsi" class="col-sm-2 control-label">RIG</label>
+                    <div class="col-sm-10">
+                        <input id="txtrig" name="rig" class="form-control input-sm" type="text" />
+                        @*<textarea id="txtDeskripsi" name="Deskripsi" class="form-control input-sm" type="text"></textarea>*@
+                    </div>
+                </div>
+                @*Date*@
+                <div class="form-group">
+                    <label for="txtDate" class="col-sm-2 control-label">Dari</label>
+                    <div class="col-sm-10">
+                        <input id="txtrutedari" name="rute_dari" class="form-control input-sm" type="text" />
+                    </div>
+
+
+                </div>
+                @*Date*@
+                <div class="form-group">
+                    <label for="txtDate" class="col-sm-2 control-label">Ke</label>
+                    <div class="col-sm-10">
+                        <input id="txtke" name="rute_ke" class="form-control input-sm" type="text" />
+                    </div>
+
+
+                </div>
+                @*Date*@
+                <div class="form-group">
+                    <label for="txtDate" class="col-sm-2 control-label">Jarak(Km)</label>
+                    <div class="col-sm-10">
+                        <input id="txtjarak" name="jarak" class="form-control input-sm" type="text" />
+                    </div>
+
+
+
+                </div>
+                <div class="form-group">
+                    <label for="ddlContractNumber" class="col-sm-2 control-label">Transporter</label>
+                    <div class="col-sm-10">
+                        <input type="hidden" name="txtIDEdit" id="txtIDEdit" />
+                        <select class="form-control input-sm" name="transporter" id="ddltransporter">
+                            @foreach (var item in ViewBag.datavm2)
+                            {
+                                <option value="@item.id">@item.name</option>
+
+                            }
+                        </select>
+                    </div>
+                </div>
+                @*Date*@
+                <div class="form-group">
+                    <label for="txtDate" class="col-sm-2 control-label">Tanggal</label>
+                    <div class="col-sm-10">
+                        <input id="txttanggal2" class="form-control input-sm" type="text" />
+                    </div>
+
+
+                </div>
+                @*Date*@
+                <div class="form-group">
+                    <label for="txtDate" class="col-sm-2 control-label">Jam</label>
+                    <div class="col-sm-10">
+                        <input id="txtjam" name="jam" class="form-control input-sm" type="text" />
+                    </div>
+
+
+                </div>
+                <div class="form-group">
+                    <label for="txtDate" class="col-sm-2 control-label">Hari PJP</label>
+                    <div class="col-sm-10">
+                        <input id="txtharipjp" name="target_hari" class="form-control input-sm" type="text" />
+                    </div>
+
+
+                </div>
+                <div class="form-group">
+                    <label for="txtDate" class="col-sm-2 control-label">Est Trip</label>
+                    <div class="col-sm-10">
+                        <input id="txttrip" name="target_trip" class="form-control input-sm" type="text" />
+                    </div>
+
+
+                </div>
+
+                @*Button*@
+                <div class="modal-footer">
+                    <button class="btn btn-success" type="button" style="background-color:#a6c218; color:white;" id="hideCreate" onclick="SubmitRigMovement()">Submit</button>
+                    <button class="btn btn-success" type="button" style="background-color:#a6c218; color:white;" id="hideCreate" onclick="EditRigMovement()">Edit</button>
+                    @*<button class="btn btn-success" type="button" style="background-color:#a6c218; color:blue;" id="hideEdit" onclick="EditEngineeringEstimateSubmit()">Submit</button>*@
+                    <button class="btn btn-default" type="button" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+
+
+
+
+<div class="modal fade" id="ModalRig" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:1000px">
+        <div class="modal-content" style="width:1000px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="ModalRig">
+                    <i class="fa fa-fw fa-cloud">Add Data</i>
+                </h4>
+            </div>
+            <div class="modal-body col">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <form id="formModalEngineeringEstimate" class="form-horizontal" name="formModalRig" method="post" action="">
+                            <input type="hidden" name="id" id="id" />
+                            @* Contract Number *@
+
+                            @* Nilai *@
+                            <div class="form-group">
+                                <label for="txtNilai" class="col-sm-2 control-label">Tanggal</label>
+                                <div class="col-sm-10">
+                                    <input id="txttanggal" name="tanggal" class="form-control input-sm" type="text" />
+                                </div>
+                            </div>
+                            @*Date*@
+                            <div class="form-group">
+                                <label for="txtDate" class="col-sm-2 control-label">Area</label>
+                                <div class="col-sm-10">
+                                    <input id="txtarea" name="area" class="form-control input-sm" type="text" />
+                                </div>
+
+
+                            </div>
+                            <div class="form-group">
+                                <label for="txtDeskripsi" class="col-sm-2 control-label">RIG</label>
+                                <div class="col-sm-10">
+                                    <input id="txtrig" name="rig" class="form-control input-sm" type="text" />
+                                    @*<textarea id="txtDeskripsi" name="Deskripsi" class="form-control input-sm" type="text"></textarea>*@
+                                </div>
+                            </div>
+                            @*Date*@
+                            <div class="form-group">
+                                <label for="txtDate" class="col-sm-2 control-label">Dari</label>
+                                <div class="col-sm-10">
+                                    <input id="txtrutedari" name="rute_dari" class="form-control input-sm" type="text" />
+                                </div>
+
+
+                            </div>
+                            @*Date*@
+                            <div class="form-group">
+                                <label for="txtDate" class="col-sm-2 control-label">Ke</label>
+                                <div class="col-sm-10">
+                                    <input id="txtke" name="rute_ke" class="form-control input-sm" type="text" />
+                                </div>
+
+
+                            </div>
+                            @*Date*@
+                            <div class="form-group">
+                                <label for="txtDate" class="col-sm-2 control-label">Jarak(Km)</label>
+                                <div class="col-sm-10">
+                                    <input id="txtjarak" name="jarak" class="form-control input-sm" type="text" />
+                                </div>
+
+
+
+                            </div>
+                            <div class="form-group">
+                                <label for="ddlContractNumber" class="col-sm-2 control-label">Transporter</label>
+                                <div class="col-sm-10">
+                                    <input type="hidden" name="txtIDEdit" id="txtIDEdit" />
+                                    <select class="form-control input-sm" name="transporter" id="ddltransporter">
+                                        @foreach (var item in ViewBag.datavm2)
+                                        {
+                                            <option value="@item.id">@item.name</option>
+
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            @*Date*@
+                            <div class="form-group">
+                                <label for="txtDate" class="col-sm-2 control-label">Tanggal</label>
+                                <div class="col-sm-10">
+                                    <input id="txttanggal2" class="form-control input-sm" type="text" />
+                                </div>
+
+
+                            </div>
+                            @*Date*@
+                            <div class="form-group">
+                                <label for="txtDate" class="col-sm-2 control-label">Jam</label>
+                                <div class="col-sm-10">
+                                    <input id="txtjam" name="jam" class="form-control input-sm" type="text" />
+                                </div>
+
+
+                            </div>
+                            <div class="form-group">
+                                <label for="txtDate" class="col-sm-2 control-label">Hari PJP</label>
+                                <div class="col-sm-10">
+                                    <input id="txtharipjp" name="target_hari" class="form-control input-sm" type="text" />
+                                </div>
+
+
+                            </div>
+                            <div class="form-group">
+                                <label for="txtDate" class="col-sm-2 control-label">Est Trip</label>
+                                <div class="col-sm-10">
+                                    <input id="txttrip" name="target_trip" class="form-control input-sm" type="text" />
+                                </div>
+
+
+                            </div>
+
+                            @*Button*@
+                        <div class="modal-footer">
+                            <button class="btn btn-success" type="button" style="background-color:#a6c218; color:white;" id="hideCreate" onclick="SubmitRigMovement()">Submit</button>
+                            <button class="btn btn-success" type="button" style="background-color:#a6c218; color:white;" id="hideCreate" onclick="EditRigMovement()">Edit</button>
+                            @*<button class="btn btn-success" type="button" style="background-color:#a6c218; color:blue;" id="hideEdit" onclick="EditEngineeringEstimateSubmit()">Submit</button>*@
+                            <button class="btn btn-default" type="button" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="ModalRigDetail" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:1000px">
+        <div class="modal-content" style="width:1000px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="ModalRig">
+                    <i class="fa fa-fw fa-cloud">Add Data</i>
+                </h4>
+            </div>
+            <div class="modal-body col">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <form id="formModalEngineeringEstimate" class="form-horizontal" name="formModalRig" method="post" action="">
+                            <input type="hidden" name="id" id="id" />
+                            @* Contract Number *@
+
+                            @* Nilai *@
+                            <div class="form-group">
+                                <label for="txtNilai" class="col-sm-2 control-label">Trip Move Out</label>
+                                <div class="col-sm-10">
+                                    <input id="txtmoveout" name="moveout" class="form-control input-sm" type="text" />
+                                </div>
+                            </div>
+                            @*Date*@
+                            <div class="form-group">
+                                <label for="txtDate" class="col-sm-2 control-label">Trip Move In</label>
+                                <div class="col-sm-10">
+                                    <input id="txtmovein" name="movein" class="form-control input-sm" type="text" />
+                                </div>
+
+
+                            </div>
+                            <div class="form-group">
+                                <label for="txtDeskripsi" class="col-sm-2 control-label">Kendala</label>
+                                <div class="col-sm-10">
+
+                                    <textarea id="txtkendala" name="Deskripsi" class="form-control input-sm" type="text"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="txtDeskripsi" class="col-sm-2 control-label">Tindak Lanjut</label>
+                                <div class="col-sm-10">
+
+                                    <textarea id="txttindaklanjut" name="Deskripsi" class="form-control input-sm" type="text"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="txtDeskripsi" class="col-sm-2 control-label">Faktor Keterlambatan</label>
+                                <div class="col-sm-10">
+
+                                    <select class="form-control input-sm" name="transporter" id="ddlfaktor">
+                                        @*@foreach (var item in ViewBag.datavm2)
+                                        {
+                                            <option value="@item.id">@item.name</option>
+
+                                        }*@
+
+                                    </select>
+                                </div>
+                            </div>
+                            @*Date*@
+                         
+                          
+                           
+
+                            @*Button*@
+                            <div class="modal-footer">
+                                 <button class="btn btn-success" type="button" style="background-color:#a6c218; color:white;" id="hideCreate" onclick="SubmitRigMovementDetail()">Submit</button>
+                                @*<button class="btn btn-success" type="button" style="background-color:#a6c218; color:white;" id="hideCreate" onclick="EditRigMovement()">Edit</button>*@
+                                @*<button class="btn btn-success" type="button" style="background-color:#a6c218; color:blue;" id="hideEdit" onclick="EditEngineeringEstimateSubmit()">Submit</button>*@
+                                <button class="btn btn-default" type="button" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    var UrlDelete = '@Url.Action("DeleteRigMaterial", "RigMaterial")';
+    var UrlCreate = '@Url.Action("CreateRigMaterial" ,"RigMaterial")';
+    var UrlGet = '@Url.Action("GetEditList", "RigMaterial")';
+    var UrlEdit = '@Url.Action("EditRigMaterial", "RigMaterial")';
+    var UrlCreateDetail = '@Url.Action("CreateRigMaterialDetail" ,"RigMaterial")';
+</script>

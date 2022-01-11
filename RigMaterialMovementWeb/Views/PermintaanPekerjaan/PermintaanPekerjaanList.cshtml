@@ -1,0 +1,1279 @@
+﻿@model List<RigMaterialMovementWeb.Models.PermintaanPekerjaanList>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Pengangkutan Material Rig</title>
+</head>
+<body>
+    <input type="hidden" name="id" id="txtapproval" value="@ViewBag.approval[0].role_id" />
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg" style="width:100vh">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">New Data</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-danger">
+                                <div class="panel-body">
+                                    <form name="myform" id="myform" class="form-horizontal" method="post" action="">
+                                        <input type="hidden" name="id" id="id" />
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">No. WO :</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" name="txtTranspoter" id="txtmodalnowo" required />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">No. Activity :</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" name="txtTranspoter" id="txtmodalnoact" required />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Judul Pekerjaan :</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" name="txtTranspoter" id="txtmodaljudul" required />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Lokasi Asal :</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" name="txtTranspoter" id="txtlokasiasal" required />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">CP Lokasi Asal :</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" name="txtTranspoter" id="cplokasiasal" required />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Lokasi Tujuan :</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" name="txtTranspoter" id="txtlokasitujuan" required />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">CP Lokasi Tujuan :</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" name="txtTranspoter" id="txtcplokasitujuan" required />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Detail Barang :</label>
+                                            <div class="col-sm-8">
+                                                <textarea id="txtmodaldetailbarang" name="Deskripsi" class="form-control input-sm" type="text"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4">Keterangan :</label>
+                                            <div class="col-sm-8">
+                                                <textarea id="txtmodalketerangan" name="Deskripsi" class="form-control input-sm" type="text"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-4" id="tex">Approver :</label>
+                                            <div class="col-sm-8">
+                                                <select class="form-control input-sm" name="ST" id="ddlorang">
+                                                    @foreach (var item in ViewBag.orang)
+                                                    {
+                                                        <option value="@item.name">@item.name</option>
+
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-4 col-sm-8">
+                                                <button class="btn btn-success" type="button" style="background-color:#a6c218; color:white;" id="btnSubmitApprove" onclick="Approve()">Approve</button>
+                                                <button class="btn btn-success" type="button" style="background-color:#a6c218; color:white;" id="btnSubmitpp" onclick="createPermintaanPekerjaan()">Submit</button>
+                                                <button class="btn btn-success" type="button" style="background-color:#a6c218; color:white; display:none;" id="btnUpdatepp" onclick="updateTransporteruuu()">Edit</button>
+                                                <button class="btn btn-default" type="button" data-dismiss="modal" aria-hidden="true" onclick="clearForm()">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <h4>Pengangkutan Material Rig</h4>
+            <div class="form-horizontal">
+                <div class="form-group">
+
+                    @*<div class="row col-lg-7" style="margin-top:1%">
+            <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">No. WO</label>
+
+            <input id="txtwosrc" name="tanggal" class="form-control input-sm" type="text" />
+        </div>
+
+        <div class="row col-lg-7" style="margin-top:1%">
+            <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">No. Activity</label>
+
+            <input id="txtactivitysrc" name="tanggal" class="form-control input-sm" type="text" />
+        </div>
+        <div class="row col-lg-7" style="margin-top:1%">
+            <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">Judul Pekerjaan</label>
+
+            <input id="txtjudulsrc" name="tanggal" class="form-control input-sm" type="text" />
+        </div>
+        <div class="row col-lg-7" style="margin-top:1%">
+            <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">Lokasi Asal</label>
+
+            <input id="txtlokasiasalsrc" name="tanggal" class="form-control input-sm" type="text" />
+
+        </div>
+        <div class="row col-lg-7" style="margin-top:1%">
+            <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">Lokasi Tujuan</label>
+
+            <input id="txtlokasitujuansrc" name="tanggal" class="form-control input-sm" type="text" />
+
+        </div>
+        <div class="row col-lg-7" style="margin-top:1%">
+            <label class="col-lg-3" style="margin-right:4%">Status</label>
+
+            <select class="form-control input-sm" name="ST" id="ddlstatussrc">
+                <option value=""> </option>
+                @foreach (var item in ViewBag.statussrc)
+                {
+                    <option value="@item.id">@item.name</option>
+
+                }
+            </select>
+        </div>*@
+
+                    <div class="row col-lg-6 " style="margin-top:1%">
+                        <label class="col-lg-3" style="margin-right:2%">Tanggal Mulai</label>
+                        <div class="col-lg-4" style="margin-left:-2.5%;">
+                            <div class="input-group date">
+                                <input autocomplete="off" type="text" id="txttglpekerjaansrcstart" class="form-control">
+                                <div class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <label class="col-lg-1">To</label>
+                        <div class="input-group date col-lg-4">
+                            <input autocomplete="off" type="text" id="txttglpekerjaansrcend" class="form-control">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row col-lg-6 " style="margin-top:1%">
+                        <button onclick="FilterPermintaanPekerjaan()" type="button" class="btn btn-sm btn-success" style="background-color:blue; border-color:blue"><i class="glyphicon glyphicon-search"></i>Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12 ">
+            <div class="form-horizontal">
+                <br />
+                <button onclick="OpenModal()" type="button" class="btn btn-sm btn-success" style="background-color:#a6c218; border-color:#a6c218"><i class="glyphicon glyphicon-file"></i>Create New</button>
+
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table id="grid" class="table table-striped table-bordered table-responsive">
+                            <thead class="btn-primary">
+                                <tr>
+
+                                    <th>No.</th>
+                                    @{ var role = ViewBag.approval[0].role_id;
+                                        if (role == 1 || role == 3)
+                                        {
+                                            <th>CRUD</th>
+                                        }
+                                        else
+                                        {
+
+                                        }
+
+                                    }
+                                    <th>No. WO</th>
+                                    <th>Activity No.</th>
+                                    <th>Judul Pekerjaan</th>
+                                    <th>Lokasi Asal</th>
+                                    <th>Lokasi Tujuan</th>
+                                    <th>Tanggal Pekerjaan</th>
+                                    <th>Status</th>
+                                    <th>Disetujui Oleh</th>
+                                    <th>Dibuat Oleh</th>
+                                    <th>Diselesaikan Oleh</th>
+                                    @{ var test = ViewBag.approval[0].role_id;
+                                        if (test == 2 || test == 4)
+                                        {
+                                            <th>Action</th>
+                                        }
+                                        else
+                                        {
+
+                                        }
+
+                                    }
+
+
+
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+
+
+<script>
+
+    $(document).ready(function () {
+  
+        $("#txttglpekerjaansrcstart").datepicker({
+          
+        });
+        $("#txttglpekerjaansrcend").datepicker({
+         
+        });
+       
+    var hostname = location.pathname;
+    var res = hostname.replace("/PermintaanPekerjaanList", "");
+    var full = res + '/PermintaanPekerjaanDetail'
+    var full2 =  res + '/PermintaanPekerjaanApprovalForm'
+
+
+        var role = $('#txtapproval').val()
+        if (role == 2) {
+
+
+
+            var grid = $('#grid').DataTable({
+                ajax: {
+                    url: "@Url.Action("PermintaanPekerjaan", "PermintaanPekerjaan")",
+                    type: "GET",
+                    datatype: "json"
+                },
+                "columns": [
+                    {
+                        "data": 'id',
+                        "searchable": false,
+                        "orderable": false,
+
+                    },
+                    {
+                        "data": 'no_wo',
+                        "render": function (data, type, row, meta) {
+                            return '<a href="' + full + "?param=" + row.id + '">' + data + '</a>';
+                        }
+                    },
+                    { "data": 'no_activity' },
+                    { "data": 'judul_pekerjaan' },
+                    { "data": 'lokasi_asal' },
+                    { "data": 'lokasi_tujuan' },
+                    {
+                        "data": 'tanggal_pekerjaan',
+                        "render": function (data) {
+                            var StartDateServer = data;
+                            var parsedDate = new Date(parseInt(StartDateServer.substr(6)));
+                            var finalDate = parsedDate.toLocaleDateString('en-GB'); //result as mm/dd/yyyy
+                            return finalDate;
+                        },
+                    },
+                    { "data": 'status' },
+                    { "data": 'approved_by' },
+                    { "data": 'last_modified_by' },
+                    { "data": 'finished_by' },
+
+                    {
+                        "data": 'status',
+                        "render": function (data, type, row, meta) {
+                            if (data == "Completed") {
+                                return '<button type="button" class="btn btn-success hidden"><span class="fa fa-check"></span></button>';
+                            }
+                            else {
+                                return '<a href="' + full2 + "?param=" + row.id + '"><button type="button" class="btn btn-success"><span class="fa fa-check"></span></button></a>';
+                              
+                            }
+                        }
+                    },
+                  
+                ],
+                dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                "columnDefs": [
+                    { "searchable": true }
+                ],
+                "order": [[0, 'desc']]
+            });
+            grid.on('order.dt search.dt', function () {
+                grid.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+        }
+         
+           @*if (role == 3) {
+            var grid = $('#grid').DataTable({
+                ajax: {
+                    url: "@Url.Action("PermintaanPekerjaan", "PermintaanPekerjaan")",
+                    type: "GET",
+                    datatype: "json"
+                },
+                "columns": [
+                    {
+                        "data": 'id',
+                        "searchable": false,
+                        "orderable": false,
+
+                    },
+                    {
+                        "data": "id",
+                        "render": function (data, type, full) {
+                            if (full.status == "On Progress") {
+                                return '<button type="button" class="btn btn-success" onclick="editTransporterasda(' + full.id + ')"><span class="fa fa-pencil"></span></button>&nbsp;&nbsp;' +
+                                    ' <button type="button" class="btn btn-danger" onclick="deleteTransporter(' + full.id + ')"><i class="fa fa-trash-o"></i></button>'
+                            } else {
+                                return '<button type="button" class="btn btn-danger" onclick="deleteTransporter(' + full.id + ')"><i class="fa fa-trash-o"></i></button>'
+                            }
+                        }
+                    },
+                    {
+                        "data": 'no_wo',
+                        "render": function (data, type, row, meta) {
+                            return '<a href="' + full + "?param=" + row.id + '">' + data + '</a>';
+                        }
+                    },
+                    { "data": 'no_activity' },
+                    { "data": 'judul_pekerjaan' },
+                    { "data": 'lokasi_asal' },
+                    { "data": 'lokasi_tujuan' },
+                    {
+                        "data": 'tanggal_pekerjaan',
+                        "render": function (data) {
+                            var StartDateServer = data;
+                            var parsedDate = new Date(parseInt(StartDateServer.substr(6)));
+                            var finalDate = parsedDate.toLocaleDateString('en-GB'); //result as mm/dd/yyyy
+                            return finalDate;
+                        },
+                    },
+                    { "data": 'status' },
+                    { "data": 'approved_by' },
+                    { "data": 'last_modified_by' },
+                    { "data": 'finished_by' },
+
+                ],
+                dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                "columnDefs": [
+                    { "searchable": true }
+                ],
+                "order": [[0, 'desc']]
+            });
+            grid.on('order.dt search.dt', function () {
+                grid.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+        }*@
+
+
+         if (role == 1 || role == 3) {
+
+                var grid = $('#grid').DataTable({
+                    ajax: {
+                        url: "@Url.Action("PermintaanPekerjaan", "PermintaanPekerjaan")",
+                        type: "GET",
+                        datatype: "json"
+                    },
+                    "columns": [
+                        {
+                            "data": 'id',
+                            "searchable": false,
+                            "orderable": false,
+
+                        },
+                        {
+                            "data": "id",
+                            "render": function (data, type, full) {
+                                if (full.status == "On Progress") {
+                                    return '<button type="button" class="btn btn-success" onclick="editTransporterasda(' + full.id + ')"><span class="fa fa-pencil"></span></button>&nbsp;&nbsp;' +
+                                        ' <button type="button" class="btn btn-danger" onclick="deleteTransporter(' + full.id + ')"><i class="fa fa-trash-o"></i></button>'
+                                } else {
+                                    return '<button type="button" class="btn btn-danger" onclick="deleteTransporter(' + full.id + ')"><i class="fa fa-trash-o"></i></button>'
+                                }
+                            }
+                        },
+                        {
+                            "data": 'no_wo',
+                            "render": function (data, type, row, meta) {
+                                return '<a href="' + full + "?param=" + row.id + '">' + data + '</a>';
+                            }
+                        },
+                        { "data": 'no_activity' },
+                        { "data": 'judul_pekerjaan' },
+                        { "data": 'lokasi_asal' },
+                        { "data": 'lokasi_tujuan' },
+                        {
+                            "data": 'tanggal_pekerjaan',
+                            "render": function (data) {
+                                var StartDateServer = data;
+                                var parsedDate = new Date(parseInt(StartDateServer.substr(6)));
+                                var finalDate = parsedDate.toLocaleDateString('en-GB'); //result as mm/dd/yyyy
+                                return finalDate;
+                            },
+                        },
+                        { "data": 'status' },
+                        { "data": 'approved_by' },
+                        { "data": 'last_modified_by' },
+                        { "data": 'finished_by' },
+
+                    ],
+                    dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                    "columnDefs": [
+                        { "searchable": true }
+                    ],
+                    "order": [[0, 'desc']]
+                });
+                grid.on('order.dt search.dt', function () {
+                    grid.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }).draw();
+
+        }
+         else if (role == 4) {
+                        var getData = {
+                no_wo: $('#txtwosrc').val(),
+                no_activity: $('#txtactivitysrc').val(),
+                judul_pekerjaan: $('#txtjudulsrc').val(),
+                lokasi_asal: $('#txtlokasiasalsrc').val(),
+                lokasi_tujuan: $('#txtlokasitujuansrc').val(),
+                tanggal_pekerjaandari: $('#txttglpekerjaansrcstart').val(),
+                tanggal_pekerjaansampai: $('#txttglpekerjaansrcend').val(),
+                status: $('#ddlstatussrc').val()
+            }
+            var grid = $('#grid').DataTable({
+                "destroy": true,
+                ajax: {
+                    url: "@Url.Action("PermintaanPekerjaan", "PermintaanPekerjaan")",
+                    type: "post",
+                    data: getData,
+                    datatype: "json"
+                },
+                 "columns": [
+                        {
+                            "data": 'id',
+                            "searchable": false,
+                            "orderable": false,
+
+                        },
+
+                        {
+                            "data": 'no_wo',
+                            "render": function (data, type, row, meta) {
+                                return '<a href="' + full + "?param=" + row.id + '">' + data + '</a>';
+                            }
+                        },
+                        { "data": 'no_activity' },
+                        { "data": 'judul_pekerjaan' },
+                        { "data": 'lokasi_asal' },
+                        { "data": 'lokasi_tujuan' },
+                        {
+                            "data": 'tanggal_pekerjaan',
+                            "render": function (data) {
+                                var StartDateServer = data;
+                                var parsedDate = new Date(parseInt(StartDateServer.substr(6)));
+                                var finalDate = parsedDate.toLocaleDateString('en-GB'); //result as mm/dd/yyyy
+                                return finalDate;
+                            },
+                        },
+                        { "data": 'status' },
+                        { "data": 'approved_by' },
+                     { "data": 'last_modified_by' },
+                        { "data": 'finished_by' },
+                          {
+                        "data": 'status',
+                        "render": function (data, type, row, meta) {
+                            if (data == "On Progress") {
+                                return '<button type="button" class="btn btn-success" onclick="editTransporterWahoo(' + row.id + ')"><span class="fa fa-check"></span></button>&nbsp;&nbsp;';
+                            } else {
+                                return '';
+                            }
+                        }
+                    },
+
+
+                    ],
+                dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                "columnDefs": [
+                    { "searchable": true }
+                ],
+                "order": [[0, 'desc']]
+            });
+            grid.on('order.dt search.dt', function () {
+                grid.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+        }
+    });
+
+     function Approve() {
+     var UrlEditStatus = '@Url.Action("EditPermintaanPekerjaanStatusApprove" ,"PermintaanPekerjaan")';
+
+            var DataPost = {
+              id: $('#id').val()
+
+        }
+
+        $.ajax({
+            type: "post",
+            url: UrlEditStatus,
+            data: DataPost,
+            success: function (Result) {
+                if (Result != "") {
+                    $.ajax({
+                        success: function (Result) {
+
+                          
+                        },
+                        error: function (event, textStatus, errorThrown) {
+
+                          
+                        }
+                    })
+                } else {
+
+                }
+            },
+            error: function (event, textStatus, errorThrown) {
+                alert("Message : Javasript or your connection is disabled or not connected ");
+            }
+        })
+
+         location.reload();
+
+    }
+
+     function updateTransporteruuu() {
+         if ($('#myform').valid()) {
+             var full = location.protocol + '//' + location.hostname + (location.port ? ':' + location.port : '') + '~/Master/CreateTransporter';
+             if (Validation()) {
+                 var DataPost = {
+                     id: $('#id').val(),
+                     no_wo: $('#txtmodalnowo').val(),
+                     no_Activity: $('#txtmodalnoact').val(),
+                     judul_pekerjaan: $('#txtmodaljudul').val(),
+                     lokasi_asal: $('#txtlokasiasal').val(),
+                     cp_lokasi_asal: $('#cplokasiasal').val(),
+                     lokasi_tujuan: $('#txtlokasitujuan').val(),
+                     cp_lokasi_tujuan: $('#txtcplokasitujuan').val(),
+                     detail_barang: $('#txtmodaldetailbarang').val(),
+                     keterangan: $('#txtmodalketerangan').val(),
+                     approver:  $('#ddlorang').val()
+                 }
+                 $.ajax({
+                     type: "post",
+                     url: '@Url.Action("EditPekerjaan" ,"PermintaanPekerjaan")',
+                     data: DataPost,
+                     success: function (Result) {
+                         if (Result != "") {
+                             $.ajax({
+                                 success: function (Result) {
+                                     $("#grid").DataTable().ajax.reload();
+                                     clearForm();
+                                     $.notify({
+                                         message: 'Success Edited Data...'
+                                     }, {
+                                         type: 'success'
+                                     });
+                                 },
+                                 error: function (event, textStatus, errorThrown) {
+                                     $.notify({
+                                         title: 'Failed!',
+                                         message: event.responseText + event.status
+                                     }, {
+                                         type: 'danger'
+                                     });
+                                 }
+                             })
+                         } else {
+
+                         }
+                     },
+
+                 });
+                 $('#myModal').modal('hide');
+                 location.reload();
+             }
+         }
+    }
+
+    function OpenModal() {
+
+        $.ajax({
+            url: '@Url.Action("GetModalData", "PermintaanPekerjaan")',
+            type: 'GET',
+            success: function (Result) {
+                if (Result != "") {
+                    var dataParse = JSON.parse(Result);
+                    $('#txtmodalnowo').val(dataParse[0].no_wo);
+                    $('#txtmodalnoact').val(dataParse[0].no_activity);
+
+                }
+            }
+        });
+        $('#txtmodalnowo').prop('readonly', true);
+        $('#txtmodalnoact').prop('readonly', true);
+        $('#txtmodaljudul').prop('readonly', false);
+        $('#txtlokasiasal').prop('readonly', false);
+        $('#cplokasiasal').prop('readonly', false);
+        $('#txtlokasitujuan').prop('readonly', false);
+        $('#txtcplokasitujuan').prop('readonly', false);
+        $('#txtmodaldetailbarang').prop('readonly', false);
+        $('#txtmodalketerangan').prop('readonly', false);
+        $('#ddlorang').show();
+         $('#tex').show();
+         $('#txtmodaljudul').val('');
+        $('#txtlokasiasal').val('');
+        $('#cplokasiasal').val('');
+        $('#txtlokasitujuan').val('');
+        $('#txtcplokasitujuan').val('');
+        $('#txtmodaldetailbarang').val('');
+        $('#txtmodalketerangan').val('');
+        $('#btnSubmitpp').show();
+        $('#btnSubmitApprove').hide();
+
+        $('#btnUpdatepp').hide();
+        $('#myModal').modal('show');
+        $('.modal-title').text('edit Data');
+    }
+
+    function FilterPermintaanPekerjaan() {
+        var full2 = location.protocol + '//' + /:\/\/([^\/]+)/.exec(window.location.href)[1] + '~/PermintaanPekerjaan/PermintaanPekerjaanApprovalForm';
+
+
+        var role = $('#txtapproval').val()
+        if (role == 2) {
+            var getData = {
+                //no_wo: $('#txtwosrc').val(),
+                //no_activity: $('#txtactivitysrc').val(),
+                //judul_pekerjaan: $('#txtjudulsrc').val(),
+                //lokasi_asal: $('#txtlokasiasalsrc').val(),
+                //lokasi_tujuan: $('#txtlokasitujuansrc').val(),
+                tanggal_pekerjaandari: $('#txttglpekerjaansrcstart').val(),
+                tanggal_pekerjaansampai: $('#txttglpekerjaansrcend').val(),
+                //status: $('#ddlstatussrc').val()
+            }
+            var grid = $('#grid').DataTable({
+                "destroy": true,
+                ajax: {
+                    url: "@Url.Action("FilterPermintaanPekerjaan", "PermintaanPekerjaan")",
+                    type: "post",
+                    data: getData,
+                    datatype: "json"
+                },
+                "columns": [
+                    { "data": 'id', "searchable": false, "orderable": false },
+                    { "data": 'no_wo' },
+                    { "data": 'no_activity' },
+                    { "data": 'judul_pekerjaan' },
+
+                    { "data": 'lokasi_asal' },
+
+                    { "data": 'lokasi_tujuan' },
+                    {
+                        "data": 'tanggal_pekerjaan',
+                        "render": function (data) {
+                            var StartDateServer = data;
+                            var parsedDate = new Date(parseInt(StartDateServer.substr(6)));
+                            var finalDate = parsedDate.toLocaleDateString('en-GB'); //result as mm/dd/yyyy
+                            return finalDate;
+                        },
+                    },
+                    { "data": 'status' },
+                    { "data": 'approved_by' },
+                    { "data": 'last_modified_by' },
+                    { "data": 'finished_by' },
+                    {
+                        "data": 'status',
+                        "render": function (data, type, row, meta) {
+                            if (data == "Completed") {
+                                return '<button type="button" class="btn btn-success hidden"><span class="fa fa-check"></span></button>';
+                            }
+                            else {
+                                return '<a href="' + full2 + "?param=" + row.id + '"><button type="button" class="btn btn-success"><span class="fa fa-check"></span></button></a>';
+
+                            }
+                        }
+                    },
+
+
+                ],
+                dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                "columnDefs": [
+                    { "searchable": true }
+                ],
+                "order": [[0, 'desc']]
+            });
+            grid.on('order.dt search.dt', function () {
+                grid.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+        }
+        else if (role == 1 || role == 3) {
+            var getData = {
+                //no_wo: $('#txtwosrc').val(),
+                //no_activity: $('#txtactivitysrc').val(),
+                //judul_pekerjaan: $('#txtjudulsrc').val(),
+                //lokasi_asal: $('#txtlokasiasalsrc').val(),
+                //lokasi_tujuan: $('#txtlokasitujuansrc').val(),
+                tanggal_pekerjaandari: $('#txttglpekerjaansrcstart').val(),
+                tanggal_pekerjaansampai: $('#txttglpekerjaansrcend').val(),
+                //status: $('#ddlstatussrc').val()
+            }
+            var grid = $('#grid').DataTable({
+                "destroy": true,
+                ajax: {
+                    url: "@Url.Action("FilterPermintaanPekerjaan", "PermintaanPekerjaan")",
+                    type: "post",
+                    data: getData,
+                    datatype: "json"
+                },
+                "columns": [
+                    {
+                        "data": 'id',
+                        "searchable": false,
+                        "orderable": false,
+
+                    },
+                    {
+                        "data": "id",
+                        "render": function (data, type, full) {
+                            if (full.status == "On Progress") {
+                                return '<button type="button" class="btn btn-success" onclick="editTransporterasda(' + full.id + ')"><span class="fa fa-pencil"></span></button>&nbsp;&nbsp;' +
+                                    ' <button type="button" class="btn btn-danger" onclick="deleteTransporter(' + full.id + ')"><i class="fa fa-trash-o"></i></button>'
+                            } else {
+                                return '<button type="button" class="btn btn-danger" onclick="deleteTransporter(' + full.id + ')"><i class="fa fa-trash-o"></i></button>'
+                            }
+                        }
+                    },
+                    {
+                        "data": 'no_wo',
+
+                    },
+                    { "data": 'no_activity' },
+                    { "data": 'judul_pekerjaan' },
+                    { "data": 'lokasi_asal' },
+                    { "data": 'lokasi_tujuan' },
+                    {
+                        "data": 'tanggal_pekerjaan',
+                        "render": function (data) {
+                            var StartDateServer = data;
+                            var parsedDate = new Date(parseInt(StartDateServer.substr(6)));
+                            var finalDate = parsedDate.toLocaleDateString('en-GB'); //result as mm/dd/yyyy
+                            return finalDate;
+                        },
+                    },
+                    { "data": 'status' },
+                    { "data": 'approved_by' },
+                    { "data": 'last_modified_by' },
+                    { "data": 'finished_by' },
+
+
+
+
+                ],
+                dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                "columnDefs": [
+                    { "searchable": true }
+                ],
+                "order": [[0, 'desc']]
+            });
+            grid.on('order.dt search.dt', function () {
+                grid.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+        }
+        @*else if (role == 3) {
+            var getData = {
+                //no_wo: $('#txtwosrc').val(),
+                //no_activity: $('#txtactivitysrc').val(),
+                //judul_pekerjaan: $('#txtjudulsrc').val(),
+                //lokasi_asal: $('#txtlokasiasalsrc').val(),
+                //lokasi_tujuan: $('#txtlokasitujuansrc').val(),
+                tanggal_pekerjaandari: $('#txttglpekerjaansrcstart').val(),
+                tanggal_pekerjaansampai: $('#txttglpekerjaansrcend').val(),
+                //status: $('#ddlstatussrc').val()
+            }
+            var grid = $('#grid').DataTable({
+                "destroy": true,
+                ajax: {
+                    url: "@Url.Action("FilterPermintaanPekerjaan", "PermintaanPekerjaan")",
+                    type: "post",
+                    data: getData,
+                    datatype: "json"
+                },
+                "columns": [
+                    {
+                        "data": 'id',
+                        "searchable": false,
+                        "orderable": false,
+
+                    },
+
+                    {
+                        "data": 'no_wo',
+
+                    },
+                    { "data": 'no_activity' },
+                    { "data": 'judul_pekerjaan' },
+                    { "data": 'lokasi_asal' },
+                    { "data": 'lokasi_tujuan' },
+                    {
+                        "data": 'tanggal_pekerjaan',
+                        "render": function (data) {
+                            var StartDateServer = data;
+                            var parsedDate = new Date(parseInt(StartDateServer.substr(6)));
+                            var finalDate = parsedDate.toLocaleDateString('en-GB'); //result as mm/dd/yyyy
+                            return finalDate;
+                        },
+                    },
+                    { "data": 'status' },
+                    { "data": 'approved_by' },
+                    { "data": 'last_modified_by' },
+                    { "data": 'finished_by' },
+
+
+                ],
+                dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                "columnDefs": [
+                    { "searchable": true }
+                ],
+                "order": [[0, 'desc']]
+            });
+            grid.on('order.dt search.dt', function () {
+                grid.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+        }*@
+        else if (role == 4) {
+                        var getData = {
+                //no_wo: $('#txtwosrc').val(),
+                //no_activity: $('#txtactivitysrc').val(),
+                //judul_pekerjaan: $('#txtjudulsrc').val(),
+                //lokasi_asal: $('#txtlokasiasalsrc').val(),
+                //lokasi_tujuan: $('#txtlokasitujuansrc').val(),
+                tanggal_pekerjaandari: $('#txttglpekerjaansrcstart').val(),
+                tanggal_pekerjaansampai: $('#txttglpekerjaansrcend').val(),
+                //status: $('#ddlstatussrc').val()
+            }
+            var grid = $('#grid').DataTable({
+                "destroy": true,
+                ajax: {
+                    url: "@Url.Action("FilterPermintaanPekerjaan", "PermintaanPekerjaan")",
+                    type: "post",
+                    data: getData,
+                    datatype: "json"
+                },
+                 "columns": [
+                        {
+                            "data": 'id',
+                            "searchable": false,
+                            "orderable": false,
+
+                        },
+
+                        {
+                            "data": 'no_wo',
+
+                        },
+                        { "data": 'no_activity' },
+                        { "data": 'judul_pekerjaan' },
+                        { "data": 'lokasi_asal' },
+                        { "data": 'lokasi_tujuan' },
+                        {
+                            "data": 'tanggal_pekerjaan',
+                            "render": function (data) {
+                                var StartDateServer = data;
+                                var parsedDate = new Date(parseInt(StartDateServer.substr(6)));
+                                var finalDate = parsedDate.toLocaleDateString('en-GB'); //result as mm/dd/yyyy
+                                return finalDate;
+                            },
+                        },
+                        { "data": 'status' },
+                        { "data": 'approved_by' },
+                     { "data": 'last_modified_by' },
+                        { "data": 'finished_by' },
+                          {
+                        "data": 'status',
+                        "render": function (data, type, row, meta) {
+                            if (data == "Approved") {
+                                return '<button type="button" class="btn btn-success hidden"><span class="fa fa-check"></span></button>';
+                            }
+                            else {
+                                return '<button type="button" class="btn btn-success" onclick="Approve(' + row.id + ')"><span class="fa fa-pencil"></span></button>';
+
+                            }
+                        }
+                    },
+
+                    ],
+                dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                "columnDefs": [
+                    { "searchable": true }
+                ],
+                "order": [[0, 'desc']]
+            });
+            grid.on('order.dt search.dt', function () {
+                grid.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+        }
+    }
+
+    function editTransporterasda(ID) {
+
+        var getData = {
+            id: ID
+        }
+        $.ajax({
+            data: getData,
+            url: '@Url.Action("GetEdit", "PermintaanPekerjaan")',
+            type: 'GET',
+            success: function (Result) {
+                if (Result != "") {
+                    var dataParse = JSON.parse(Result);
+                    $('#txtmodalnowo').val(dataParse[0].no_wo);
+                    $('#txtmodalnoact').val(dataParse[0].no_activity);
+                    $('#txtmodaljudul').val(dataParse[0].judul_pekerjaan);
+                    $('#txtlokasiasal').val(dataParse[0].lokasi_asal);
+                    $('#cplokasiasal').val(dataParse[0].cp_lokasi_asal);
+                    $('#txtlokasitujuan').val(dataParse[0].lokasi_tujuan);
+                    $('#txtcplokasitujuan').val(dataParse[0].cp_lokasi_tujuan);
+                    $('#txtmodaldetailbarang').val(dataParse[0].detail_barang);
+                    $('#txtmodalketerangan').val(dataParse[0].keterangan);
+                    $('#ddlorang').val(dataParse[0].approver);
+
+                    $('#id').val(ID);
+
+                }
+            }
+        });
+        $('#btnSubmitpp').hide();
+        $('#btnSubmitApprove').hide();
+        $('#btnUpdatepp').show();
+        //$('#ddlorang').prop('disabled', false);
+        $('#ddlorang').show();
+         $('#tex').show();
+
+        $('#txtmodalnowo').prop('readonly', true);
+        $('#txtmodalnoact').prop('readonly', true);
+
+
+        $('#myModal').modal('show');
+        $('.modal-title').text('Edit Data');
+    }
+
+     function editTransporterWahoo(ID) {
+
+        var getData = {
+            id: ID
+        }
+        $.ajax({
+            data: getData,
+            url: '@Url.Action("GetEdit", "PermintaanPekerjaan")',
+            type: 'GET',
+            success: function (Result) {
+                if (Result != "") {
+                    var dataParse = JSON.parse(Result);
+                    $('#txtmodalnowo').val(dataParse[0].no_wo);
+                    $('#txtmodalnoact').val(dataParse[0].no_activity);
+                    $('#txtmodaljudul').val(dataParse[0].judul_pekerjaan);
+                    $('#txtlokasiasal').val(dataParse[0].lokasi_asal);
+                    $('#cplokasiasal').val(dataParse[0].cp_lokasi_asal);
+                    $('#txtlokasitujuan').val(dataParse[0].lokasi_tujuan);
+                    $('#txtcplokasitujuan').val(dataParse[0].cp_lokasi_tujuan);
+                    $('#txtmodaldetailbarang').val(dataParse[0].detail_barang);
+                    $('#txtmodalketerangan').val(dataParse[0].keterangan);
+                    $('#ddlstatussrc').val(dataParse[0].approver);
+                        $('#id').val(ID);
+                }
+            }
+        });
+            //$('#ddlorang').prop('disabled', true);
+         $('#ddlorang').hide();
+         $('#tex').hide();
+         $('#btnSubmitpp').hide();
+         $('#btnSubmitApprove').show();
+        $('#btnUpdatepp').hide();
+          $('#txtmodalnowo').prop('readonly', true);
+         $('#txtmodalnoact').prop('readonly', true);
+          $('#txtmodaljudul').prop('readonly', true);
+        $('#txtlokasiasal').prop('readonly', true);
+        $('#cplokasiasal').prop('readonly', true);
+        $('#txtlokasitujuan').prop('readonly', true);
+        $('#txtcplokasitujuan').prop('readonly', true);
+        $('#txtmodaldetailbarang').prop('readonly', true);
+        $('#txtmodalketerangan').prop('readonly', true);
+        $('#myModal').modal('show');
+        $('.modal-title').text('Edit Data');
+    }
+
+    function getIndex() {
+        $.ajax({
+            url: "@Url.Action("PermintaanPekerjaanList", "PermintaanPekerjaan")",
+            type: "GET",
+            datatype: "json",
+            success: function (result, x, z) {
+                grid.clear();
+                grid.rows.add(result);
+                grid.draw();
+            }
+        });
+    }
+
+    function createPermintaanPekerjaan() {
+
+        var full = location.protocol + '//' + /:\/\/([^\/]+)/.exec(window.location.href)[1] + '~/Master/CreateTransporter';
+        if (Validation()) {
+            var DataPost = {
+                no_wo: $('#txtmodalnowo').val(),
+                no_activity: $('#txtmodalnoact').val(),
+                judul_pekerjaan: $('#txtmodaljudul').val(),
+                lokasi_asal: $('#txtlokasiasal').val(),
+                cp_lokasi_asal: $('#cplokasiasal').val(),
+                lokasi_tujuan: $('#txtlokasitujuan').val(),
+                cp_lokasi_tujuan: $('#txtcplokasitujuan').val(),
+                detail_barang: $('#txtmodaldetailbarang').val(),
+                keterangan: $('#txtmodalketerangan').val(),
+                approver: $('#ddlorang').val()
+
+            }
+            $.ajax({
+                type: "post",
+                url: '@Url.Action("CreatePermintaanPekerjaan" ,"PermintaanPekerjaan")',
+                data: DataPost,
+                success: function (Result) {
+                    if (Result != "") {
+                        $.ajax({
+                            success: function (Result) {
+                                $("#grid").DataTable().ajax.reload();
+                                clearForm();
+                                $.notify({
+                                    message: 'Success Adding Data...'
+                                }, {
+                                    type: 'success'
+                                });
+                                //alert(full);
+                                //window.location.href = full;
+                                //location.reload();
+                            },
+                            error: function (event, textStatus, errorThrown) {
+                                $.notify({
+                                    title: 'Failed!',
+                                    message: event.responseText + event.status
+                                }, {
+                                    type: 'danger'
+                                });
+                            }
+                        })
+                    } else {
+
+                    }
+                },
+                error: function (event, textStatus, errorThrown) {
+                    alert("Message : Javasript or your connection is disabled or not connected ");
+                }
+            });
+            $('#myModal').modal('hide');
+        }
+    }
+
+
+    function updateTransporter() {
+        if ($('#myform').valid()) {
+            var full = location.protocol + '//' + /:\/\/([^\/]+)/.exec(window.location.href)[1] + '~/Master/CreateTransporter';
+            var DataPost = {
+                id: $('#id').val(),
+                name: $('#txtTranspoter').val(),
+            }
+            $.ajax({
+                type: "post",
+                url: '@Url.Action("EditTransporter" ,"Master")',
+                data: DataPost,
+                success: function (Result) {
+                    if (Result != "") {
+                        $.ajax({
+                            success: function (Result) {
+                                $("#grid").DataTable().ajax.reload();
+                                clearForm();
+                                $.notify({
+                                    message: 'Success Edited Data...'
+                                }, {
+                                    type: 'success'
+                                });
+                            },
+                            error: function (event, textStatus, errorThrown) {
+                                $.notify({
+                                    title: 'Failed!',
+                                    message: event.responseText + event.status
+                                }, {
+                                    type: 'danger'
+                                });
+                            }
+                        })
+                    } else {
+
+                    }
+                },
+
+            });
+            $('#myModal').modal('hide');
+        }
+    }
+
+    function editTransporter(ID) {
+
+        var getData = {
+            id: ID
+        }
+        $.ajax({
+            data: getData,
+            url: '@Url.Action("GetEdit", "Master")',
+            type: 'POST',
+            success: function (Result) {
+                if (Result != "") {
+                    var dataParse = JSON.parse(Result);
+                    $('#txtTranspoter').val(dataParse[0].name);
+                    $('#id').val(ID);
+                }
+            }
+        });
+
+        $('#btnSubmitTransporter').hide();
+        $('#btnUpdateTransporter').show();
+        $('#myModal').modal('show');
+        $('.modal-title').text('Edit Data');
+    }
+
+    function deleteTransporter(ID) {
+
+        if (confirm("Are you sure you want to delete this data?")) {
+            var delData = {
+                id: ID
+            }
+            $.ajax({
+                data: delData,
+                url: '@Url.Action("DeletePekerjaan", "PermintaanPekerjaan")',
+                type: 'POST',
+                success: function (Result) {
+                    $("#grid").DataTable().ajax.reload();
+                    $.notify({
+                        message: 'Success Deleted Data...'
+                    }, {
+                        type: 'success'
+                    });
+                }
+            });
+        }
+        return false;
+    }
+
+    function clearForm() {
+        $('#id').val("");
+        $('#txtTranspoter').val("");
+    }
+
+
+
+
+
+    function Validation() {
+
+
+    if (!$("#txtmodalnowo").val()) {
+        $("#txtmodalnowo").focus();
+        return false;
+    }
+    if (!$("#txtmodalnoact").val()) {
+        $("#txtmodalnoact").focus();
+        alert("All field must be filled");
+        return false;
+        }
+         if (!$("#txtmodaljudul").val()) {
+        $("#txtmodaljudul").focus();
+        return false;
+    }
+    if (!$("#txtlokasiasal").val()) {
+        $("#txtlokasiasal").focus();
+        alert("All field must be filled");
+        return false;
+        }
+         if (!$("#cplokasiasal").val()) {
+        $("#cplokasiasal").focus();
+        return false;
+    }
+        if (!$("#txtlokasitujuan").val()) {
+            $("#txtlokasitujuan").focus();
+            alert("All field must be filled");
+            return false;
+        }
+         if (!$("#txtcplokasitujuan").val()) {
+        $("#txtcplokasitujuan").focus();
+        return false;
+    }
+        if (!$("#txtmodaldetailbarang").val()) {
+            $("#txtmodaldetailbarang").focus();
+            alert("All field must be filled");
+            return false;
+        }
+         if (!$("#txtmodalketerangan").val()) {
+        $("#txtmodalketerangan").focus();
+        return false;
+    }
+
+
+    return true;
+}
+</script>
+

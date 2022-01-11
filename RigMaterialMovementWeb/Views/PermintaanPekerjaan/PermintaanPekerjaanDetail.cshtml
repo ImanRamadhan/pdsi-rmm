@@ -1,0 +1,245 @@
+﻿@model List<RigMaterialMovementWeb.Models.PermintaanPekerjaanList>
+@{
+    ViewBag.Title = "PermintaanPekerjaanApprovalForm";
+}
+
+<input type="hidden" id="txtviewbag" name="tanggal" class="form-control input-sm" value="@ViewBag.Test" />
+
+<div class="card-body">
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-danger">
+                <div class="panel-body">
+                    <h4><b>Form Pengangkutan Material Rig</b></h4>
+                    <div class="form-group">
+                        <label for="txtNilai" class="col-sm-2 control-label">No. WO</label>
+                        <div class="col-sm-10">
+                            <input id="txttanggal" name="tanggal" class="form-control input-sm" type="text" value="@ViewBag.Datanya[0].no_wo" />
+                        </div>
+                    </div>
+                    <!-- /.form-group -->
+                    <div class="form-group">
+                        <label for="txtDate" class="col-sm-2 control-label">No. Activity</label>
+                        <div class="col-sm-10">
+                            <input id="txtarea" name="area" class="form-control input-sm" type="text" value="@ViewBag.Datanya[0].no_activity" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtDeskripsi" class="col-sm-2 control-label">Judul Pekerjaan</label>
+                        <div class="col-sm-10">
+                            <input id="txtrig" name="rig" class="form-control input-sm" type="text" value="@ViewBag.Datanya[0].judul_pekerjaan" />
+                            @*<textarea id="txtDeskripsi" name="Deskripsi" class="form-control input-sm" type="text"></textarea>*@
+                        </div>
+                    </div><br />
+                    <div class="form-group">
+                        <label for="txtDate" class="col-sm-2 control-label">Lokasi Asal</label>
+                        <div class="col-sm-10">
+                            <input id="txtke" name="rute_ke" class="form-control input-sm" type="text" value="@ViewBag.Datanya[0].lokasi_asal" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtDate" class="col-sm-2 control-label">Lokasi Tujuan</label>
+                        <div class="col-sm-10">
+                            <input id="txtjarak" name="jarak" class="form-control input-sm" type="text" value="@ViewBag.Datanya[0].lokasi_tujuan" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ddlContractNumber" class="col-sm-2 control-label">Detail Barang</label>
+
+                        <div class="col-sm-10">
+                            <textarea readonly id="txtDeskripsi" name="Deskripsi" class="form-control input-sm" type="text">@ViewBag.Datanya[0].detail_barang</textarea>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="txtDate" class="col-sm-2 control-label">Keterangan</label>
+                        <div class="col-sm-10">
+                            <textarea readonly id="txtDeskripsi2" name="Deskripsi" class="form-control input-sm" type="text">@ViewBag.Datanya[0].keterangan</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtDate" class="col-sm-2 control-label">Approver</label>
+                        <div class="col-sm-10">
+                            <input id="txtapprover" name="approver" class="form-control input-sm" type="text" value="@ViewBag.Datanya[0].approver" />
+                        </div>
+                    </div><br />
+
+                    <!-- /.form-group -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table id="List" class="table table-striped table-bordered table-responsive">
+                <thead>
+                    <tr class="btn-primary">
+
+                        <th>Tanggal</th>
+                        <th>Notes</th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.tanggalstat)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.notes)
+                            </td>
+
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+
+<div id="ModalRig" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="width:100vh">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">New Data</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-danger">
+                            <div class="panel-body">
+                                <form name="myform" id="myform" class="form-horizontal" method="post" action="">
+                                    <input type="hidden" name="id" id="idmodal" />
+                                    <div class="form-group">
+                                        <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">Notes</label>
+                                        <textarea id="txtnotes" name="Deskripsi" class="form-control input-sm" type="text"></textarea>
+
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#txttanggal').prop('readonly', true);
+        $('#txtarea').prop('readonly', true);
+        $('#txtrig').prop('readonly', true);
+        $('#txtke').prop('readonly', true);
+        $('#txtjarak').prop('readonly', true);
+        $('#txtapprover').prop('readonly', true);
+
+
+    });
+    function SubmitNotes() {
+     var UrlCreateDetails = '@Url.Action("CreatePermintaanPekerjaanDetail" ,"PermintaanPekerjaan")';
+
+        var DataPost = {
+            permintaan_pekerjaan_id: $('#txtviewbag').val(),
+            notes: $('#txtnotes').val(),
+            status_id: $('#ddlstatus').val()
+
+        }
+
+        $.ajax({
+            type: "post",
+            url: UrlCreateDetails,
+            data: DataPost,
+            success: function (Result) {
+                if (Result != "") {
+                    $.ajax({
+                        success: function (Result) {
+
+                           location.reload();
+                        },
+                        error: function (event, textStatus, errorThrown) {
+
+                           location.reload();
+
+                        }
+                    })
+                } else {
+
+                }
+            },
+            error: function (event, textStatus, errorThrown) {
+                alert("Message : Javasript or your connection is disabled or not connected ");
+            }
+        })
+
+        location.reload();
+    }
+
+      function Complete() {
+     var UrlEditStatus = '@Url.Action("EditPermintaanPekerjaanStatus" ,"PermintaanPekerjaan")';
+
+            var hostname = location.pathname;
+	var res = hostname.replace("/PermintaanPekerjaanApprovalForm", "");
+	var full = res + '/PermintaanPekerjaanList'
+	 alert(full);
+          var DataPost = {
+            id: $('#txtviewbag').val()
+
+        }
+
+        $.ajax({
+            type: "post",
+            url: UrlEditStatus,
+            data: DataPost,
+            success: function (Result) {
+                if (Result != "") {
+                    $.ajax({
+                        success: function (Result) {
+
+                            //location.reload();
+                        },
+                        error: function (event, textStatus, errorThrown) {
+
+                            //location.reload();
+
+                        }
+                    })
+                } else {
+
+                }
+            },
+            error: function (event, textStatus, errorThrown) {
+                alert("Message : Javasript or your connection is disabled or not connected ");
+            }
+        })
+
+          window.location.href = fulL;
+
+    }
+
+    function PopUp() {
+       $('#ModalRig').modal('show');
+    }
+
+</script>

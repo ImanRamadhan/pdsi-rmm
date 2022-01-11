@@ -1,0 +1,107 @@
+﻿@using RigMaterialMovementWeb.Models
+@{
+    
+    List<LaporanRekapData> data = (ViewBag.data != null) ? (List<LaporanRekapData>)ViewBag.data : new List<LaporanRekapData>();
+}
+<div class="panel panel-default" style="margin-top:2%">
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table id="List" class="table table-striped table-bordered table-responsive">
+                <thead>
+                    <tr class="btn-primary">
+                        <th rowspan="2" style="text-align:center;vertical-align:middle">No</th>
+                        <th rowspan="2" style="text-align:center;vertical-align:middle">Area</th>
+                        <th rowspan="2" style="text-align:center;vertical-align:middle">Rig</th>
+                        <th colspan="2" style="text-align:center">Rute</th>
+                        <th rowspan="2" style="text-align:center;vertical-align:middle">Jarak (Km)</th>
+                        <th rowspan="2" style="text-align:center;vertical-align:middle">Transporter</th>
+                        <th rowspan="2" style="text-align:center;vertical-align:middle">Biaya</th>
+                        <th colspan="2" style="text-align:center">Target</th>
+                        <th colspan="2" style="text-align:center">Mulai</th>
+                        <th colspan="2" style="text-align:center">Selesai</th>
+                        <th rowspan="2" style="text-align:center;vertical-align:middle">Total Hari(jam)</th>
+                        <th rowspan="2" style="text-align:center;vertical-align:middle">Selisih Hari Moving</th>
+                        <th rowspan="2" style="text-align:center;vertical-align:middle">Status</th>
+                        <th rowspan="2" style="text-align:center;vertical-align:middle">Kendala</th>
+                        <th rowspan="2" style="text-align:center;vertical-align:middle">Tindak Lanjut</th>
+                        <th rowspan="2" style="text-align:center;vertical-align:middle">Faktor Keterlambatan</th>
+                    </tr>
+                    <tr class="btn-primary">
+
+                        <th style="text-align:center;vertical-align:middle">Dari</th>
+                        <th style="text-align:center;vertical-align:middle">Ke</th>
+                        <th style="text-align:center;vertical-align:middle">Hari PJP</th>
+                        <th style="text-align:center;vertical-align:middle">Est Trip</th>
+                        <td style="text-align:center;vertical-align:middle">Tanggal</td>
+                        <td style="text-align:center;vertical-align:middle">Jam</td>
+                        <td style="text-align:center;vertical-align:middle">Tanggal</td>
+                        <td style="text-align:center;vertical-align:middle">Jam</td>
+
+                    </tr>
+
+                </thead>
+                <tbody>
+
+                    @foreach (var item in data)
+                    {
+                        <tr>
+                            <td>
+                                @item.nomor
+                            </td>
+
+                            <td>
+                                @item.area
+                            </td>
+                            <td>
+                                @item.rig
+                            </td>
+                            <td>
+                                @item.rute_dari
+                            </td>
+                            <td>
+                                @item.rute_ke
+                            </td>
+                            <td>
+                                @item.jarak
+                            </td>
+                            <td>
+                                @item.transporter
+                            </td>
+                            <td>
+                                @item.biaya
+                            </td>
+                            <td>
+                                @item.target_hari (@item.target_hari_hour)
+                            </td>
+                            <td>
+                                @item.target_trip
+                            </td>
+                            <td>
+                                @item.tanggal_mulai_string
+                            </td>
+                            <td>
+                                @item.jamMulai
+                            </td>
+                            <td>
+                                @item.tanggal_selesai
+                            </td>
+                            <td>
+                                @item.jamSelesai
+                            </td>
+                            <td>@item.total_hari (@item.total_hari_hour)</td>
+                            <td>
+                                @item.selisih_string
+                            </td>
+                            <td>
+                                @item.status
+                            </td>
+                            <td>@item.kendala</td>
+                            <td>@item.tindaklanjut</td>
+                            <td>@item.faktorketerlambatan</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

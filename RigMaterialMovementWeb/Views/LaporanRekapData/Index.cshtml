@@ -1,0 +1,515 @@
+﻿@using RigMaterialMovementWeb.Models
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<LaporanRekapData> data = (ViewBag.data != null) ? (List<LaporanRekapData>)ViewBag.data : new List<LaporanRekapData>();
+    List<DDLTransporter> dataArea = (ViewBag.area != null) ? (List<DDLTransporter>)ViewBag.area : new List<DDLTransporter>();
+    dataArea = dataArea.GroupBy(x => x.name).Select(x => x.First()).ToList();
+}
+
+    <div class="container">
+        <h3>Laporan Rekap Data</h3>
+        <div class="form-horizontal">
+            <div class="form-group">
+
+                <div class="row col-lg-7" style="margin-top:1%">
+                    <label class="col-lg-3">Area</label>
+
+                    <select class="form-control input-sm " name="ST" id="ddlareasrc">
+                        <option value=""></option>
+                        @foreach (var item in dataArea)
+                        {
+                            <option value="@item.name">@item.name</option>
+
+                        }
+                    </select>
+                </div>
+
+                <div class="row col-lg-7" style="margin-top:1%">
+                    <label class="col-lg-3">RIG</label>
+                    <select class="form-control input-sm" id="ddlrigsrc">
+                        @*<option value=""></option>
+                        @foreach (var item in ViewBag.rig)
+                        {
+                            <option value="@item.name">@item.name</option>
+
+                        }*@
+                    </select>
+                </div>
+
+                <div class="row col-lg-7" style="margin-top:1%">
+                    <label class="col-lg-3">Transporter</label>
+                    <select class="form-control input-sm" name="ST" id="ddltrans">
+                        <option value=""></option>
+                        @foreach (var item in ViewBag.ddlTransporter)
+                        {
+                            <option value="@item.name">@item.name</option>
+
+                        }
+                    </select>
+                </div>
+
+
+                <div class="row col-lg-7 " style="margin-top:1%">
+                    <label class="col-lg-3">Tanggal Mulai</label>
+                    <div class="col-lg-3" style="margin-left:-2.5%;">
+                        <div class="input-group date">
+                            <input autocomplete="off" type="text" id="txtTglMulaiStart" class="form-control">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <label class="col-lg-2">To</label>
+                        <div class="input-group date col-lg-5">
+                            <input autocomplete="off" type="text" id="txtTglMulaiEnd" class="form-control">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row col-lg-7 " style="margin-top:1%">
+                    <label class="col-lg-3">Tanggal Selesai</label>
+                    <div class="col-lg-3" style="margin-left:-2.5%;">
+                        <div class="input-group date">
+                            <input autocomplete="off" type="text" id="txtTglSelesaiStart" class="form-control">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <label class="col-lg-2">To</label>
+                        <div class="input-group date form_datetime col-lg-5">
+                            <input autocomplete="off" type="text" id="txtTglSelesaiEnd" class="form-control">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row col-lg-7" style="margin-top:1%">
+                    <label class="col-lg-3">Status</label>
+                    <select class="form-control input-sm" name="ST" id="ddlstatus">
+                        <option value=""></option>
+                        <option value="Lebih Cepat">Lebih Cepat</option>
+                        <option value="Sesuai">Sesuai</option>
+                        <option value="Lebih Lambat">Lebih Lambat</option>
+                    </select>
+                </div>
+                <div class="row col-lg-7" style="margin-top:1%">
+                    <div class="col-lg-3">
+                        <button onclick="Search();" type="button" class="btn btn-sm btn-success" style="background-color:#a6c218; border-color:#a6c218">Search &nbsp;<i class="glyphicon glyphicon-search"></i></button>
+                    </div>
+                </div>
+
+            </div>
+            <button id="btnexportS" onclick="exportToExcelS();" type="button" class="btn btn-sm btn-success" style="background-color:#a6c218; border-color:#a6c218;display:none">Export to Excell&nbsp;<i class="glyphicon glyphicon-file"></i></button>
+            <button id="btnexport" onclick="exportToExcel();" type="button" class="btn btn-sm btn-success" style="background-color:#a6c218; border-color:#a6c218">Export to Excell&nbsp;<i class="glyphicon glyphicon-file"></i></button>
+        </div>
+        <div id="partialPage">
+
+        </div>
+        <div class="panel panel-default" style="margin-top:2%" id="form1">
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table id="List" class="table table-striped table-bordered table-responsive">
+                        <thead>
+                            <tr class="btn-primary">
+                                <th rowspan="2" style="text-align:center;vertical-align:middle">No</th>
+                                <th rowspan="2" style="text-align:center;vertical-align:middle">Area</th>
+                                <th rowspan="2" style="text-align:center;vertical-align:middle">Rig</th>
+                                <th colspan="2" style="text-align:center">Rute</th>
+                                <th rowspan="2" style="text-align:center;vertical-align:middle">Jarak (Km)</th>
+                                <th rowspan="2" style="text-align:center;vertical-align:middle">Transporter</th>
+                                <th rowspan="2" style="text-align:center;vertical-align:middle">Biaya</th>
+                                <th colspan="2" style="text-align:center">Target</th>
+                                <th colspan="2" style="text-align:center">Mulai</th>
+                                <th colspan="2" style="text-align:center">Selesai</th>
+                                <th rowspan="2" style="text-align:center;vertical-align:middle">Total Hari(jam)</th>
+                                <th rowspan="2" style="text-align:center;vertical-align:middle">Selisih Hari Moving</th>
+                                <th rowspan="2" style="text-align:center;vertical-align:middle">Status</th>
+                                <th rowspan="2" style="text-align:center;vertical-align:middle">Kendala</th>
+                                <th rowspan="2" style="text-align:center;vertical-align:middle">Tindak Lanjut</th>
+                                <th rowspan="2" style="text-align:center;vertical-align:middle">Faktor Keterlambatan</th>
+                            </tr>
+                            <tr class="btn-primary">
+
+                                <th style="text-align:center;vertical-align:middle">Dari</th>
+                                <th style="text-align:center;vertical-align:middle">Ke</th>
+                                <th style="text-align:center;vertical-align:middle">Hari PJP</th>
+                                <th style="text-align:center;vertical-align:middle">Est Trip</th>
+                                <td style="text-align:center;vertical-align:middle">Tanggal</td>
+                                <td style="text-align:center;vertical-align:middle">Jam</td>
+                                <td style="text-align:center;vertical-align:middle">Tanggal</td>
+                                <td style="text-align:center;vertical-align:middle">Jam</td>
+
+                            </tr>
+
+
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in data)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.nomor
+                                    </td>
+
+                                    <td>
+                                        @item.area
+                                    </td>
+                                    <td>
+                                        @item.rig
+                                    </td>
+                                    <td>
+                                        @item.rute_dari
+                                    </td>
+                                    <td>
+                                        @item.rute_ke
+                                    </td>
+                                    <td>
+                                        @item.jarak
+                                    </td>
+                                    <td>
+                                        @item.transporter
+                                    </td>
+                                    <td>
+                                        @item.biaya
+                                    </td>
+                                    <td>
+                                        @item.target_hari (@item.target_hari_hour)
+                                    </td>
+                                    <td>
+                                        @item.target_trip
+                                    </td>
+                                    <td>
+                                        @item.tanggal_mulai_string
+                                    </td>
+                                    <td>
+                                        @item.jamMulai
+                                    </td>
+                                    <td>
+                                        @item.tanggal_selesai
+                                    </td>
+                                    <td>
+                                        @item.jamSelesai
+                                    </td>
+                                    <td>@item.total_hari (@item.total_hari_hour)</td>
+                                    <td>
+                                        @item.selisih_string
+                                    </td>
+                                    <td>
+                                        @item.status
+                                    </td>
+                                    <td>@item.kendala</td>
+                                    <td>@item.tindaklanjut</td>
+                                    <td>@item.faktorketerlambatan</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+   $(document).ready(function () {
+       $('#List').DataTable({
+           "paging": true,
+          "searching": false
+  });
+  $('.dataTables_length').addClass('bs-select');
+   });
+
+                $("#ddlareasrc").on("change", function () {
+                var Name = $(this).val();
+                $.getJSON("../LaporanRekapData/GetDDLRig", { name: Name },
+                    function (data) {
+                      
+                        var select = $("#ddlrigsrc");
+                        select.empty();
+                        select.append(new Option(""));
+
+                        if (Name != "") {
+                            //select.select2({
+                            //    placeholder: "",
+                                
+                            //});
+                            $.each(data, function (index, row) {
+                                select.append("<option value='" + row.name + "'>" + row.name + "</option>")
+                            });
+                        }
+                        else {
+                            select.select2({
+                                placeholder: "",
+                                
+                            });
+                        }
+
+                    });
+            });
+
+
+
+   $("#txtTglMulaiStart").datetimepicker({ changeMonth: true, changeYear: true, yearRange: '1950:2030' });
+    $("#txtTglMulaiEnd").datetimepicker({  changeMonth: true, changeYear: true, yearRange: '1950:2030' });
+    $("#txtTglSelesaiStart").datetimepicker({  changeMonth: true, changeYear: true, yearRange: '1950:2030' });
+     $("#txtTglSelesaiEnd").datetimepicker({ changeMonth: true, changeYear: true, yearRange: '1950:2030',  });
+     function data() {
+        //var startDate = $('#date_from').val();
+        //var endDate = $('#date_to').val();
+
+         //var param = "Sdate=" + startDate + "&Edate=" + endDate + "&CustomerID=" + $("#DdlCustomer").val() + "&CompaniesID=" + $("#DdlCompanies").val() + "";
+      
+         var GetData;
+         $.ajax({
+             async:false,
+                    url: '@Url.Action("GetData", "LaporanRekapData")',
+                    type: 'GET',
+                    //data: { SubId: SubId, KategoriId: KategoriId, page: 1 },
+             success: function (result) {
+                 GetData = result;
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                });
+        
+           
+
+     
+     
+        var Html ='<table border="1" style="border-collapse: collapse; font-family=arial;">';
+        Html += '<h3 style="margin-left:50%"><p style="text-align:center"><b>Laporan Rekap Data</b></p></h3>';
+        Html += '<tr>';
+         Html += ' <thead><tr class="btn-primary"><th rowspan="2" style="background-color:#337ab7">No</th><th rowspan="2" style="background-color:#337ab7;width:50px">Area</th><th rowspan="2" style="background-color:#337ab7">Rig</th><th colspan="2" style="background-color:#337ab7">Rute</th><th rowspan="2" style="background-color:#337ab7">Jarak (Km)</th><th rowspan="2" style="background-color:#337ab7">Transporter</th><th rowspan="2" style="background-color:#337ab7">Biaya</th><th colspan="2" style="background-color:#337ab7">Target</th><th colspan="2" style="background-color:#337ab7">Mulai</th><th colspan="2" style="background-color:#337ab7">Selesai</th><th rowspan="2" style="background-color:#337ab7">Total Hari(jam)</th><th rowspan="2" style="background-color:#337ab7">Selisih Hari Moving</th><th rowspan="2" style="background-color:#337ab7">Status</th><th rowspan="2" style="background-color:#337ab7">Kendala</th><th rowspan="2" style="background-color:#337ab7">Tindak Lanjut</th><th rowspan="2" style="background-color:#337ab7">Faktor Keterlambatan</th></tr><tr class="btn-primary"><th style="background-color:#337ab7">Dari</th><th style="background-color:#337ab7">Ke</th><th style="background-color:#337ab7">Hari PJP</th><th style="background-color:#337ab7">Est Trip</th style="background-color:#337ab7"><td style="background-color:#337ab7">Tanggal</td><td  style="background-color:#337ab7">Jam</td><td  style="background-color:#337ab7">Tanggal</td><td style="background-color:#337ab7">Jam</td></tr>';
+         Html += '</tr>';
+         for (i = 0; i < GetData.length; i++) {
+            
+            Html += '<tr>';
+            Html += '<td align="center">' + GetData[i]['nomor'] + '</td><td align="left">' + GetData[i]['area'] + '</td><td align="left">' + GetData[i]['rig'] + '</td><td align="left">' + GetData[i]['rute_dari'] + '</td><td align="right">' + GetData[i]['rute_ke'] + '</td><td align="right">' + GetData[i]['jarak'] + '</td><td align="right">' + GetData[i]['transporter'] + '</td><td align="right">' + GetData[i]['biaya'] + '</td><td align="center">' + GetData[i]['target_hari'] +'(<span>'+(GetData[i]['target_hari_hour'])+'</span>)' + '</td>' + '</td><td align="center">' + GetData[i]['target_trip'] + '</td><td>'+GetData[i]['tanggal_mulai_string']+'</td><td>' + GetData[i]['jamMulai'] + '</td><td>' + GetData[i]['tanggal_selesai'] + '</td> <td> ' + GetData[i]['jamSelesai'] + ' </td> <td > ' + GetData[i]['total_hari'] +'(<span>'+(GetData[i]['total_hari_hour'])+'</span>)' + '</td><td>' + GetData[i]['selisih_string'] + '</td><td>' + GetData[i]['status'] + '</td><td>' + GetData[i]['kendala'] + '</td><td>' + GetData[i]['tindaklanjut'] + '</td><td>' + GetData[i]['faktorketerlambatan'] + '</td>';
+            Html += '</tr>';
+             
+        }
+
+        return Html
+
+    }
+   
+
+    function exportToExcel() {
+       
+            //var StartDate = myCalendar.getFormatedDate("%d-%M-%Y", new Date($('#date_from').val()));
+            //var EndDate = myCalendar.getFormatedDate("%d-%M-%Y", new Date($('#date_to').val()));
+            //'S2P' + StartDate + '_' + EndDate
+            DownloadExcell(data(), "Laporan Rekap Data" );
+           
+
+        
+    }
+
+    function DownloadExcell(HtmlData,FileName) {
+    //window.open('data:application/vnd.ms-excel,' + encodeURIComponent(html));
+   
+    var uri = 'data:application/vnd.ms-excel;base64,';
+    var template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>';
+    var base64 = function (s) {
+        return window.btoa(unescape(encodeURIComponent(s)))
+    };
+
+    var format = function (s, c) {
+        return s.replace(/{(\w+)}/g, function (m, p) {
+            return c[p];
+        })
+    };
+
+    var ctx = {
+        worksheet: 'Worksheet',
+        table: HtmlData
+    }
+
+    var link = document.createElement("a");
+    link.download = FileName + ".xls";
+    link.href = uri + base64(format(template, ctx));
+    link.click();
+
+    }
+
+     function dataS() {
+        //var startDate = $('#date_from').val();
+        //var endDate = $('#date_to').val();
+
+         //var param = "Sdate=" + startDate + "&Edate=" + endDate + "&CustomerID=" + $("#DdlCustomer").val() + "&CompaniesID=" + $("#DdlCompanies").val() + "";
+       var Rig="";
+        var Area="";
+        var Transporter="" ;
+        var strDateM ;
+        var endDateM ;
+        var strDateS;
+        var endDateS;
+        var Status="" ;
+        if ($("#ddlrigsrc").val() != null) {
+            Rig = $("#ddlrigsrc").val();
+        }
+
+        if ($("#ddlareasrc").val() != null) {
+            Area = $("#ddlareasrc").val();
+        }
+        if ($("#ddltrans").val() != null) {
+            Transporter = $("#ddltrans").val();
+        }
+        if ($("#txtTglMulaiStart").val() != null||("#txtTglMulaiStart").val() != "") {
+            strDateM = $("#txtTglMulaiStart").val();
+        }
+        if ($("#txtTglMulaiEnd").val() != null|| $("#txtTglMulaiEnd").val() != "") {
+            endDateM = $("#txtTglMulaiEnd").val();
+        }
+        if ($("#txtTglSelesaiStart").val() != null || $("#txtTglSelesaiStart").val() != "") {
+            strDateS = $("#txtTglSelesaiStart").val();
+        }
+        if ($("#txtTglSelesaiEnd").val() != null || $("#txtTglSelesaiEnd").val() != "") {
+            endDateS = $("#txtTglSelesaiStart").val();
+        }
+        if ($("#ddlstatus").val() != null) {
+            Status = $("#ddlstatus").val();
+        }
+
+         var GetData;
+         $.ajax({
+             async:false,
+                    url: '@Url.Action("GetDataS", "LaporanRekapData")',
+                    type: 'GET',
+                     data: { area: Area, rig: Rig, transporter: Transporter, tglmulaiStrt: strDateM, tglmulaiEnd: endDateM, tglselesaiStrt: strDateS, tglselesaiEnd: endDateS,status: Status },
+            
+             success: function (result) {
+                 debugger
+                 GetData = result;
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                });
+        
+           
+
+     
+     
+        var Html ='<table border="1" style="border-collapse: collapse; font-family=arial;">';
+        Html += '<h3 style="margin-left:50%"><p style="text-align:center"><b>Laporan Rekap Data</b></p></h3>';
+        Html += '<tr>';
+         Html += ' <thead><tr class="btn-primary"><th rowspan="2" style="background-color:#337ab7">No</th><th rowspan="2" style="background-color:#337ab7;width:50px">Area</th><th rowspan="2" style="background-color:#337ab7">Rig</th><th colspan="2" style="background-color:#337ab7">Rute</th><th rowspan="2" style="background-color:#337ab7">Jarak (Km)</th><th rowspan="2" style="background-color:#337ab7">Transporter</th><th rowspan="2" style="background-color:#337ab7">Biaya</th><th colspan="2" style="background-color:#337ab7">Target</th><th colspan="2" style="background-color:#337ab7">Mulai</th><th colspan="2" style="background-color:#337ab7">Selesai</th><th rowspan="2" style="background-color:#337ab7">Total Hari(jam)</th><th rowspan="2" style="background-color:#337ab7">Selisih Hari Moving</th><th rowspan="2" style="background-color:#337ab7">Status</th><th rowspan="2" style="background-color:#337ab7">Kendala</th><th rowspan="2" style="background-color:#337ab7">Tindak Lanjut</th><th rowspan="2" style="background-color:#337ab7">Faktor Keterlambatan</th></tr><tr class="btn-primary"><th style="background-color:#337ab7">Dari</th><th style="background-color:#337ab7">Ke</th><th style="background-color:#337ab7">Hari PJP</th><th style="background-color:#337ab7">Est Trip</th style="background-color:#337ab7"><td style="background-color:#337ab7">Tanggal</td><td  style="background-color:#337ab7">Jam</td><td  style="background-color:#337ab7">Tanggal</td><td style="background-color:#337ab7">Jam</td></tr>';
+         Html += '</tr>';
+         for (i = 0; i < GetData.length; i++) {
+            
+            Html += '<tr>';
+            Html += '<td align="center">' + GetData[i]['nomor'] + '</td><td align="left">' + GetData[i]['area'] + '</td><td align="left">' + GetData[i]['rig'] + '</td><td align="left">' + GetData[i]['rute_dari'] + '</td><td align="right">' + GetData[i]['rute_ke'] + '</td><td align="right">' + GetData[i]['jarak'] + '</td><td align="right">' + GetData[i]['transporter'] + '</td><td align="right">' + GetData[i]['biaya'] + '</td><td align="center">' + GetData[i]['target_hari'] +'(<span>'+(GetData[i]['target_hari_hour'])+'</span>)' + '</td>' + '</td><td align="center">' + GetData[i]['target_trip'] + '</td><td>'+GetData[i]['tanggal_mulai_string']+'</td><td>' + GetData[i]['jamMulai'] + '</td><td>' + GetData[i]['tanggal_selesai'] + '</td> <td> ' + GetData[i]['jamSelesai'] + ' </td> <td > ' + GetData[i]['total_hari'] +'(<span>'+(GetData[i]['total_hari_hour'])+'</span>)' + '</td><td>' + GetData[i]['selisih_string'] + '</td><td>' + GetData[i]['status'] + '</td><td>' + GetData[i]['kendala'] + '</td><td>' + GetData[i]['tindaklanjut'] + '</td><td>' + GetData[i]['faktorketerlambatan'] + '</td>';
+            Html += '</tr>';
+             
+        }
+
+        return Html
+
+    }
+   
+
+    function exportToExcelS() {
+       
+            //var StartDate = myCalendar.getFormatedDate("%d-%M-%Y", new Date($('#date_from').val()));
+            //var EndDate = myCalendar.getFormatedDate("%d-%M-%Y", new Date($('#date_to').val()));
+            //'S2P' + StartDate + '_' + EndDate
+            DownloadExcellS(dataS(), "Laporan Rekap Data" );
+           
+
+        
+    }
+
+    function DownloadExcellS(HtmlData,FileName) {
+    //window.open('data:application/vnd.ms-excel,' + encodeURIComponent(html));
+   
+    var uri = 'data:application/vnd.ms-excel;base64,';
+    var template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>';
+    var base64 = function (s) {
+        return window.btoa(unescape(encodeURIComponent(s)))
+    };
+
+    var format = function (s, c) {
+        return s.replace(/{(\w+)}/g, function (m, p) {
+            return c[p];
+        })
+    };
+
+    var ctx = {
+        worksheet: 'Worksheet',
+        table: HtmlData
+    }
+
+    var link = document.createElement("a");
+    link.download = FileName + ".xls";
+    link.href = uri + base64(format(template, ctx));
+    link.click();
+
+    }
+   
+
+    function Search() {
+       
+        var Rig="";
+        var Area="";
+        var Transporter="" ;
+        var strDateM ;
+        var endDateM ;
+        var strDateS;
+        var endDateS;
+        var Status="" ;
+        if ($("#ddlrigsrc").val() != null) {
+            Rig = $("#ddlrigsrc").val();
+        }
+
+        if ($("#ddlareasrc").val() != null) {
+            Area = $("#ddlareasrc").val();
+        }
+        if ($("#ddltrans").val() != null) {
+            Transporter = $("#ddltrans").val();
+        }
+        if ($("#txtTglMulaiStart").val() != null||("#txtTglMulaiStart").val() != "") {
+            strDateM = $("#txtTglMulaiStart").val();
+        }
+        if ($("#txtTglMulaiEnd").val() != null|| $("#txtTglMulaiEnd").val() != "") {
+            endDateM = $("#txtTglMulaiEnd").val();
+        }
+        if ($("#txtTglSelesaiStart").val() != null || $("#txtTglSelesaiStart").val() != "") {
+            strDateS = $("#txtTglSelesaiStart").val();
+        }
+        if ($("#txtTglSelesaiEnd").val() != null || $("#txtTglSelesaiEnd").val() != "") {
+            endDateS = $("#txtTglSelesaiStart").val();
+        }
+        if ($("#ddlstatus").val() != null) {
+            Status = $("#ddlstatus").val();
+        }
+
+
+         $.ajax({
+            
+                    url: '@Url.Action("Search", "LaporanRekapData")',
+             type: 'GET',
+             data: { area: Area, rig: Rig, transporter: Transporter, tglmulaiStrt: strDateM, tglmulaiEnd: endDateM, tglselesaiStrt: strDateS, tglselesaiEnd: endDateS,status: Status },
+             success: function (result) {
+                 $('#partialPage').html(result);
+                 $("#form1").hide();
+                 $("#btnexport").hide();
+                 $("#btnexportS").show();
+                    },
+                    error: function (err) {
+                      
+                        alert(err);
+                    }
+                });
+
+    }
+</script>

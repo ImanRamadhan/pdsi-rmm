@@ -1,0 +1,138 @@
+﻿@using RigMaterialMovementWeb.Models
+@{
+    ViewBag.Title = "Create";
+    List<DDLTransporter> dataArea = (ViewBag.datavm66 != null) ? (List<DDLTransporter>)ViewBag.datavm66 : new List<DDLTransporter>();
+    dataArea = dataArea.GroupBy(x => x.name).Select(x => x.First()).ToList();
+}
+<head>
+
+    <script src="~/Scripts/Create.js"></script>
+
+</head>
+
+<form id="formModalEngineeringEstimate" class="form-horizontal" name="formModalRig" method="post" action="">
+    <input type="hidden" name="id" id="id" />
+    @* Contract Number *@
+
+    @* Nilai *@
+    <h4><b>Rig Movement/Mobilization</b></h4>
+
+    @*Date*@
+    <div class="form-group">
+        <label for="txtDate" class="col-sm-2 control-label">Area</label>
+        <div class="col-sm-10">
+            <select class="form-control input-sm" name="transporter" id="ddlarea">
+                <option value="no">Pilih Area</option>
+                @foreach (var item in dataArea)
+                {
+                    <option value="@item.name">@item.name</option>
+
+                }
+            </select>
+        </div>
+
+
+    </div>
+    <div class="form-group">
+        <label for="txtDeskripsi" class="col-sm-2 control-label">RIG</label>
+        <div class="col-sm-10">
+            <select class="form-control input-sm" name="transporter" id="ddlrig">
+            </select>
+        </div>
+    </div>
+    @*Date*@
+    <h4><b>ROUTE</b></h4>
+    <div class="form-group">
+        <label for="txtDate" class="col-sm-2 control-label">Dari</label>
+        <div class="col-sm-10">
+            <input id="txtrutedari" name="rute_dari" class="form-control input-sm" type="text" />
+        </div>
+
+
+    </div>
+    @*Date*@
+    <div class="form-group">
+        <label for="txtDate" class="col-sm-2 control-label">Ke</label>
+        <div class="col-sm-10">
+            <input id="txtke" name="rute_ke" class="form-control input-sm" type="text" />
+        </div>
+
+
+    </div>
+    @*Date*@
+    <div class="form-group">
+        <label for="txtDate" class="col-sm-2 control-label">Jarak(Km)</label>
+        <div class="col-sm-10">
+            <input id="txtjarak" name="jarak" class="form-control input-sm" type="text" />
+        </div>
+
+
+
+    </div>
+    <div class="form-group">
+        <label for="ddlContractNumber" class="col-sm-2 control-label">Transporter</label>
+        <div class="col-sm-10">
+            <input type="hidden" name="txtIDEdit" id="txtIDEdit" />
+
+            <select class="form-control input-sm" name="transporter" id="ddltransporter">
+                <option value="no">Pilih</option>
+                @foreach (var item in ViewBag.datavm2)
+                {
+                    <option value="@item.id">@item.name</option>
+
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="txtDate" class="col-sm-2 control-label">Biaya</label>
+        <div class="col-sm-10">
+            <input id="txtbiaya" class="form-control input-sm" type="text" />
+        </div>
+
+
+    </div>
+    <h4><b>MULAI (H-1 MOVING)</b></h4>
+    @*Date*@
+    <div class="form-group">
+        <label for="txtDate" class="col-sm-2 control-label">Tanggal</label>
+        <div class="col-sm-10">
+            <input id="txttanggal2" class="form-control input-sm" type="text" autocomplete="off" />
+        </div>
+
+
+    </div>
+    @*Date*@
+    <h4><b>TARGET</b></h4>
+    <div class="form-group">
+        <label for="txtDate" class="col-sm-2 control-label">Hari PJP</label>
+        <div class="col-sm-10">
+            <input id="txtharipjp" name="target_hari" class="form-control input-sm" type="text" />
+        </div>
+
+
+    </div>
+    <div class="form-group">
+        <label for="txtDate" class="col-sm-2 control-label">Est Trip</label>
+        <div class="col-sm-10">
+            <input id="txttrip" name="target_trip" class="form-control input-sm" type="text" />
+        </div>
+
+
+    </div>
+
+    @*Button*@
+    <div class="modal-footer">
+        <button class="btn btn-success" type="button" style="background-color:#a6c218; color:white;" id="hideCreate" onclick="SubmitRigMovement()">Submit</button>
+
+    </div>
+</form>
+<script type="text/javascript">
+    var UrlDelete = '@Url.Action("DeleteRigMaterial", "RigMaterial")';
+    var UrlCreate = '@Url.Action("Edit" ,"RigMaterial")';
+    var UrlGet = '@Url.Action("Create", "RigMaterial")';
+    var UrlEdit = '@Url.Action("EditRigMaterial", "RigMaterial")';
+    var UrlCreateDetail = '@Url.Action("CreateRigMaterialDetail" ,"RigMaterial")';
+     var GetDDL = '@Url.Action("CreateDDL" ,"RigMaterial")';
+</script>

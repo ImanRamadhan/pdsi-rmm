@@ -1,0 +1,259 @@
+﻿@using RigMaterialMovementWeb.Models
+@*@using Highsoft.Web.Mvc.Charts
+    @using Highsoft.Web.Mvc.Charts.Rendering
+    @using System.Collections*@
+@{
+
+    List<LaporanRekapData> data = (ViewBag.data != null) ? (List<LaporanRekapData>)ViewBag.data : new List<LaporanRekapData>();
+    List<LaporanRekapData> datas =  data.GroupBy(q => q.rig).Select(q => q.First()).ToList();
+      int x = 1;
+    var datas2 = (from d in datas
+                  select new LaporanRekapData
+                  {
+                      nomor = x++,
+                  }
+                        ).ToList();
+    for(int i =0; i < datas.Count; i++)
+    {
+        datas[i].nomor = datas2[i].nomor;
+    }
+
+}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div id="container" class="col-lg-6" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+
+                <div id="container2" class="col-lg-6" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="panel panel-default" style="margin-top:2%">
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table id="List" class="table table-striped table-bordered table-responsive">
+                            <thead>
+                                <tr class="btn-primary">
+                                    <th style="text-align:center">No</th>
+                                    <th style="text-align:center">Area</th>
+                                    <th style="text-align:center">Rig</th>
+                                    <th style="text-align:center">Lebih Cepat</th>
+                                    <th style="text-align:center">Sesuai</th>
+                                    <th style="text-align:center">Lebih Lambat</th>
+                                    <th style="text-align:center">Jumlah</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in datas)
+                                {
+                                    <tr>
+                                        <td style="text-align:center">
+                                            @item.nomor
+                                        </td>
+
+                                        <td style="text-align:left">
+                                            @item.area
+                                        </td>
+                                        <td style="text-align:left">
+                                            @item.rig
+                                        </td>
+                                        <td>
+                                            @item.cepat
+                                        </td>
+                                        <td>
+                                            @item.tepat
+                                        </td>
+                                        <td>
+                                            @item.lambat
+                                        </td>
+                                        <td>
+                                            @item.jumlah
+                                        </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+       $('#List').DataTable({
+           "paging": true,
+          "searching": false
+  });
+  $('.dataTables_length').addClass('bs-select');
+});
+         $.getJSON('@Url.Action("GetData", "Home")', function (data) {
+                 Highcharts.chart('container', {
+                     navigation: {
+        buttonOptions: {
+            enabled: false
+        }
+    },
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Kinerja Moving PT.PDSI'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                     },
+                 exporting: {
+                    url: 'Chart/Export',
+                    filename: 'MyChart',
+                    width: 600
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        showInLegend: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Total',
+                    colorByPoint: true,
+                    data: [{
+                        name: 'Lebih Cepat',
+                        color: '#2eb82e',
+                        y: data.sumCepat
+                    }, {
+                            name: 'Sesuai',
+                        color : '#ffff00',
+                        y:data.sumTepat
+                    }, {
+                            name: 'Lebih Lambat',
+                        color :'#ff0000',
+                        y: data.sumLambat
+                    }]
+                }]
+                 });
+                        });
+
+
+                 $.getJSON('@Url.Action("GetDataBar", "Home")', function (data) {
+                var series = [];  
+  
+                var categories = [];  
+                var cepat = [];  
+  
+                var lambat = [];  
+  
+                     var tepat = [];  
+
+                     for (var i in data) {
+                    categories.push(data[i].area);  
+  
+                    cepat.push(data[i].cepat);  
+  
+                    lambat.push(data[i].lambat);  
+  
+                    tepat.push(data[i].tepat);
+                     }
+                      series.push({  
+  
+                        name: 'Lebih Cepat',  
+                          color: '#2eb82e',
+                          data: cepat  
+  
+                    },  
+  
+                    {  
+  
+                        name: 'Sesuai',  
+                        color : '#ffff00',
+                        data: tepat  
+  
+                    },  
+  
+                    {  
+  
+                        name: 'Lebih Lambat',  
+                         color :'#ff0000',
+                        data: lambat  
+  
+                    }  
+  
+                   
+  
+                );  
+                     Highcharts.chart('container2', {
+                     navigation: {
+        buttonOptions: {
+            enabled: false
+        }
+    },
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Kinerja Moving PT.PDSI'
+    },
+                    xAxis: {
+                        categories: categories
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Total Status'
+        },
+        stackLabels: {
+            enabled: true,
+            style: {
+                fontWeight: 'bold',
+                color: ( // theme
+                    Highcharts.defaultOptions.title.style &&
+                    Highcharts.defaultOptions.title.style.color
+                ) || 'gray'
+            }
+        }
+    },
+    legend: {
+        align: 'right',
+        x: -30,
+        verticalAlign: 'top',
+        y: 25,
+        floating: true,
+        backgroundColor:
+            Highcharts.defaultOptions.legend.backgroundColor || 'white',
+        borderColor: '#CCC',
+        borderWidth: 1,
+        shadow: false
+    },
+    tooltip: {
+        headerFormat: '<b>{point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+    },
+    plotOptions: {
+        column: {
+            stacking: 'normal',
+            dataLabels: {
+                enabled: true
+            }
+        }
+                    },
+                    series: series
+});
+                        });
+</script>

@@ -1,0 +1,406 @@
+﻿@using RigMaterialMovementWeb.Models
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<LaporanRekapData> data = (ViewBag.data != null) ? (List<LaporanRekapData>)ViewBag.data : new List<LaporanRekapData>();
+       List<DDLTransporter> dataArea = (ViewBag.area != null) ? (List<DDLTransporter>)ViewBag.area : new List<DDLTransporter>();
+    dataArea = dataArea.GroupBy(x => x.name).Select(x => x.First()).ToList();
+}
+    <div class="container">
+        <h3>Laporan Kinerja Moving RIG</h3>
+        <div class="form-horizontal">
+            <div class="form-group">
+
+                <div class="row col-lg-7" style="margin-top:1%">
+                    <label class="col-lg-3">Area</label>
+
+                    <select class="form-control input-sm " name="ST" id="ddlareasrc">
+                        <option value=""></option>
+                        @foreach (var item in dataArea)
+                        {
+                            <option value="@item.name">@item.name</option>
+
+                        }
+                    </select>
+                </div>
+
+                <div class="row col-lg-7" style="margin-top:1%">
+                    <label class="col-lg-3">RIG</label>
+                    <select class="form-control input-sm" name="ST" id="ddlrigsrc">
+                        @*<option value="" ></option>
+                        @foreach (var item in ViewBag.rig)
+                        {
+                            <option value="@item.name">@item.name</option>
+
+                        }*@
+                    </select>
+                </div>
+
+                <div class="row col-lg-7 " style="margin-top:1%">
+                    <label class="col-lg-3">Tanggal Mulai</label>
+                    <div class="col-lg-3" style="margin-left:-2.5%;">
+                        <div class="input-group date">
+                            <input autocomplete="off" type="text" id="txtTglMulaiStart" class="form-control">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <label class="col-lg-2">To</label>
+                        <div class="input-group date col-lg-5">
+                            <input autocomplete="off" type="text" id="txtTglMulaiEnd" class="form-control">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-lg-7" style="margin-top:3%">
+                    <div class="col-lg-2">
+                        <button onclick="Search();" type="button" class="btn btn-sm btn-success" style="background-color:#a6c218; border-color:#a6c218">Search &nbsp;<i class="glyphicon glyphicon-search"></i></button>
+                    </div>
+                    <div class="col-lg-3">
+                        <button onclick="exportToExcel();" type="button" class="btn btn-sm btn-success" style="background-color:#a6c218; border-color:#a6c218">Export to Excell&nbsp;<i class="glyphicon glyphicon-file"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="partialPageKinerja" style="margin-top:1%">
+
+        </div>
+    </div>
+<script>
+  $(document).ready(function () {
+       $('#List').DataTable({
+           "paging": true,
+          "searching": false
+  });
+  $('.dataTables_length').addClass('bs-select');
+  });
+
+    $("#ddlareasrc").on("change", function () {
+                var Name = $(this).val();
+                $.getJSON("../LaporanRekapData/GetDDLRig", { name: Name },
+                    function (data) {
+                      
+                        var select = $("#ddlrigsrc");
+                        select.empty();
+                        select.append(new Option(""));
+
+                        if (Name != "") {
+                            //select.select2({
+                            //    placeholder: "",
+                                
+                            //});
+                            $.each(data, function (index, row) {
+                                select.append("<option value='" + row.name + "'>" + row.name + "</option>")
+                            });
+                        }
+                        else {
+                            select.select2({
+                                placeholder: "",
+                                
+                            });
+                        }
+
+                    });
+            });
+
+
+
+  $("#txtTglMulaiStart").datetimepicker({ changeMonth: true, changeYear: true, yearRange: '1950:2030' });
+    $("#txtTglMulaiEnd").datetimepicker({  changeMonth: true, changeYear: true, yearRange: '1950:2030' });
+      function Search() {
+ 
+        var Rig="";
+        var Area="";
+        var endDateM ;
+        var strDateM;
+        if ($("#ddlrigsrc").val() != null) {
+            Rig = $("#ddlrigsrc").val();
+        }
+
+        if ($("#ddlareasrc").val() != null) {
+            Area = $("#ddlareasrc").val();
+        }
+        if ($("#txtTglMulaiStart").val() != null||("#txtTglMulaiStart").val() != "") {
+            strDateM = $("#txtTglMulaiStart").val();
+        }
+        if ($("#txtTglMulaiEnd").val() != null|| $("#txtTglMulaiEnd").val() != "") {
+            endDateM = $("#txtTglMulaiEnd").val();
+        }
+
+         $.ajax({
+            
+                    url: '@Url.Action("Search", "LaporanKinerjaMovingRIG")',
+             type: 'GET',
+             data: { area: Area, rig: Rig , tglmulaiStrt: strDateM, tglmulaiEnd: endDateM},
+             success: function (result) {
+                 $('#partialPageKinerja').html(result);
+
+                 $.getJSON('@Url.Action("GetData", "LaporanKinerjaMovingRIG")', { area: Area, rig: Rig , tglmulaiStrt: strDateM, tglmulaiEnd: endDateM}, function (data) {
+                 Highcharts.chart('container', {
+                     navigation: {
+        buttonOptions: {
+            enabled: false
+        }
+    },
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Kinerja Moving PT.PDSI'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                     },
+                 exporting: {
+                    url: 'Chart/Export',
+                    filename: 'MyChart',
+                    width: 600
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        showInLegend: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Total',
+                    colorByPoint: true,
+                    data: [{
+                        name: 'Lebih Cepat',
+                        color: '#2eb82e',
+                        y: data.sumCepat
+                    }, {
+                            name: 'Sesuai',
+                        color : '#ffff00',
+                        y:data.sumTepat
+                    }, {
+                            name: 'Lebih Lambat',
+                        color :'#ff0000',
+                        y: data.sumLambat
+                    }]
+                }]
+                 });
+                        });
+
+
+                 $.getJSON('@Url.Action("GetDataBar", "LaporanKinerjaMovingRIG")', { area: Area, rig: Rig, tglmulaiStrt: strDateM, tglmulaiEnd: endDateM }, function (data) {
+                var series = [];  
+  
+                var categories = [];  
+                var cepat = [];  
+  
+                var lambat = [];  
+  
+                     var tepat = [];  
+
+                     for (var i in data) {
+                    categories.push(data[i].area);  
+  
+                    cepat.push(data[i].cepat);  
+  
+                    lambat.push(data[i].lambat);  
+  
+                    tepat.push(data[i].tepat);
+                     }
+                      series.push({  
+  
+                        name: 'Lebih Cepat',  
+                          color: '#2eb82e',
+                          data: cepat  
+  
+                    },  
+  
+                    {  
+  
+                        name: 'Sesuai',  
+                        color : '#ffff00',
+                        data: tepat  
+  
+                    },  
+  
+                    {  
+  
+                        name: 'Lebih Lambat',  
+                         color :'#ff0000',
+                        data: lambat  
+  
+                    }  
+  
+                   
+  
+                );  
+                     Highcharts.chart('container2', {
+                     navigation: {
+        buttonOptions: {
+            enabled: false
+        }
+    },
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Kinerja Moving PT.PDSI'
+    },
+                    xAxis: {
+                        categories: categories
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Total Status'
+        },
+        stackLabels: {
+            enabled: true,
+            style: {
+                fontWeight: 'bold',
+                color: ( // theme
+                    Highcharts.defaultOptions.title.style &&
+                    Highcharts.defaultOptions.title.style.color
+                ) || 'gray'
+            }
+        }
+    },
+    legend: {
+        align: 'right',
+        x: -30,
+        verticalAlign: 'top',
+        y: 25,
+        floating: true,
+        backgroundColor:
+            Highcharts.defaultOptions.legend.backgroundColor || 'white',
+        borderColor: '#CCC',
+        borderWidth: 1,
+        shadow: false
+    },
+    tooltip: {
+        headerFormat: '<b>{point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+    },
+    plotOptions: {
+        column: {
+            stacking: 'normal',
+            dataLabels: {
+                enabled: true
+            }
+        }
+                    },
+                    series: series
+});
+                        });
+                    },
+                    error: function (err) {
+                      
+                        alert(err);
+                    }
+                });
+
+
+    }
+
+      function exportToExcel() {
+       
+            //var StartDate = myCalendar.getFormatedDate("%d-%M-%Y", new Date($('#date_from').val()));
+            //var EndDate = myCalendar.getFormatedDate("%d-%M-%Y", new Date($('#date_to').val()));
+            //'S2P' + StartDate + '_' + EndDate
+            DownloadExcell(data(), "Laporan Kinerja Moving RIG" );
+           
+
+        
+    }
+
+    function DownloadExcell(HtmlData,FileName) {
+    //window.open('data:application/vnd.ms-excel,' + encodeURIComponent(html));
+   
+    var uri = 'data:application/vnd.ms-excel;base64,';
+    var template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>';
+    var base64 = function (s) {
+        return window.btoa(unescape(encodeURIComponent(s)))
+    };
+
+    var format = function (s, c) {
+        return s.replace(/{(\w+)}/g, function (m, p) {
+            return c[p];
+        })
+    };
+
+    var ctx = {
+        worksheet: 'Worksheet',
+        table: HtmlData
+    }
+
+    var link = document.createElement("a");
+    link.download = FileName + ".xls";
+    link.href = uri + base64(format(template, ctx));
+    link.click();
+
+    }
+
+     function data() {
+        var Rig="";
+        var Area="";
+        var endDateM ;
+         var strDateM;
+        
+        if ($("#ddlrigsrc").val() != null) {
+            Rig = $("#ddlrigsrc").val();
+        }
+
+        if ($("#ddlareasrc").val() != null) {
+            Area = $("#ddlareasrc").val();
+        }
+        if ($("#txtTglMulaiStart").val() != null||("#txtTglMulaiStart").val() != "") {
+            strDateM = $("#txtTglMulaiStart").val();
+        }
+        if ($("#txtTglMulaiEnd").val() != null|| $("#txtTglMulaiEnd").val() != "") {
+            endDateM = $("#txtTglMulaiEnd").val();
+        }
+
+         var Data;
+
+         $.ajax({
+             url: '@Url.Action("Doc", "LaporanKinerjaMovingRIG")',
+             type: 'GET',
+             async:false,
+             data: { area: Area, rig: Rig , tglmulaiStrt: strDateM, tglmulaiEnd: endDateM},
+             success: function (result) {
+                 Data = result;
+                
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                });
+        
+        var Html ='<table border="1" style="border-collapse: collapse; font-family=arial;">';
+        Html += '<h3 style="margin-left:50%"><p style="text-align:center"><b>Laporan Kinerja Moving RIG</b></p></h3>';
+       // Html += '<tr>';
+         Html += '<thead><tr class="btn-primary"><th style="text-align:center;background-color:#337ab7">No</th><th style="text-align:center;background-color:#337ab7">Area</th><th style="text-align:center;background-color:#337ab7">Rig</th><th style="text-align:center;background-color:#337ab7">Lebih Cepat</th><th style="text-align:center;background-color:#337ab7">Sesuai</th><th style="text-align:center;background-color:#337ab7">Lebih Lambat</th><th style="text-align:center;background-color:#337ab7">Jumlah</th></tr></thead>';
+       //  Html += '</tr>';
+         for (i = 0; i < Data.length; i++) {
+            
+            Html += '<tr>';
+            Html += '<td style="text-align:center">' + Data[i]['nomor'] + '</td><td align="left">' + Data[i]['area'] + '</td><td align="left">' + Data[i]['rig'] + '</td><td align="right">' + Data[i]['cepat'] + '</td><td align="right">' + Data[i]['tepat'] + '</td><td align="right">' + Data[i]['lambat'] + '</td><td align="right">' + Data[i]['jumlah']+'</td>';
+            Html += '</tr>';
+             
+                            
+        }
+
+        return Html
+
+    }
+</script>

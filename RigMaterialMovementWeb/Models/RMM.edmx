@@ -1,0 +1,757 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DB_RMMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="M_Approver">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="M_Area">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="M_FaktorKeterlambatan">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="M_Rig">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="area_id" Type="int" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="M_Role">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" />
+          <Property Name="last_modified_by" Type="nvarchar" MaxLength="50" />
+          <Property Name="last_modified_date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="M_RoleManagement">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="nvarchar" MaxLength="500" />
+          <Property Name="email" Type="nvarchar" MaxLength="500" />
+          <Property Name="role_id" Type="int" />
+          <Property Name="last_modified_by" Type="nvarchar" MaxLength="50" />
+          <Property Name="last_modified_date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="M_Status">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" />
+          <Property Name="last_modified_by" Type="nvarchar" MaxLength="50" />
+          <Property Name="last_modified_date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="M_Transporter">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" />
+          <Property Name="last_modified_by" Type="nvarchar" MaxLength="50" />
+          <Property Name="last_modified_date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="T_PermintaanPekerjaan">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="no_wo" Type="nvarchar" MaxLength="50" />
+          <Property Name="no_activity" Type="nvarchar" MaxLength="50" />
+          <Property Name="judul_pekerjaan" Type="nvarchar" MaxLength="50" />
+          <Property Name="tanggal_pekerjaan" Type="date" />
+          <Property Name="lokasi_asal" Type="nvarchar" MaxLength="50" />
+          <Property Name="cp_lokasi_asal" Type="nvarchar" MaxLength="50" />
+          <Property Name="lokasi_tujuan" Type="nvarchar" MaxLength="50" />
+          <Property Name="cp_lokasi_tujuan" Type="nvarchar" MaxLength="50" />
+          <Property Name="detail_barang" Type="nvarchar" MaxLength="50" />
+          <Property Name="approver" Type="nvarchar" MaxLength="150" />
+          <Property Name="keterangan" Type="text" />
+          <Property Name="last_modified_by" Type="nvarchar" MaxLength="50" />
+          <Property Name="last_modified_date" Type="datetime" />
+          <Property Name="status_id" Type="int" />
+          <Property Name="finished_by" Type="nvarchar" MaxLength="150" />
+          <Property Name="approved_by" Type="nvarchar" MaxLength="50" />
+          <Property Name="approved_date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="T_PermintaanPekerjaanDetail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="permintaan_pekerjaan_id" Type="int" Nullable="false" />
+          <Property Name="tanggal" Type="datetime" />
+          <Property Name="notes" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="last_modified_by" Type="nvarchar" MaxLength="50" />
+          <Property Name="last_modified_date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="T_RigMaterialMovement">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="area" Type="nvarchar" MaxLength="50" />
+          <Property Name="rig" Type="nvarchar" MaxLength="50" />
+          <Property Name="rute_dari" Type="nvarchar" MaxLength="50" />
+          <Property Name="rute_ke" Type="nvarchar" MaxLength="50" />
+          <Property Name="jarak" Type="float" />
+          <Property Name="transporter_id" Type="int" />
+          <Property Name="tanggal_mulai" Type="datetime" />
+          <Property Name="target_hari" Type="int" />
+          <Property Name="target_trip" Type="int" />
+          <Property Name="biaya" Type="bigint" />
+          <Property Name="last_modified_by" Type="nvarchar" MaxLength="50" />
+          <Property Name="last_modified_date" Type="datetime" />
+        </EntityType>
+        <EntityType Name="T_RigMaterialMovementDetail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="rig_material_movement_id" Type="int" />
+          <Property Name="trip_move_out" Type="int" />
+          <Property Name="trip_move_in" Type="int" />
+          <Property Name="kendala" Type="text" />
+          <Property Name="tindak_lanjut" Type="text" />
+          <Property Name="tanggal_move" Type="datetime" />
+          <Property Name="faktor_keterlambatan" Type="text" />
+          <Property Name="last_modified_by" Type="nvarchar" MaxLength="50" />
+          <Property Name="last_modified_date" Type="datetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DB_RMM.dbo.VW_AREA' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VW_AREA">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="11" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DB_RMM.dbo.VW_FAKTORKETERLAMBATAN' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VW_FAKTORKETERLAMBATAN">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="15" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DB_RMM.dbo.VW_RIG' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VW_RIG">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="area_id" />
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="area_id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="16" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DB_RMM.dbo.VW_STATUS' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VW_STATUS">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="11" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_M_Rig_M_Area">
+          <End Role="M_Area" Type="Self.M_Area" Multiplicity="0..1" />
+          <End Role="M_Rig" Type="Self.M_Rig" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_Area">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="M_Rig">
+              <PropertyRef Name="area_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_PermintaanPekerjaan_M_Status">
+          <End Role="M_Status" Type="Self.M_Status" Multiplicity="0..1" />
+          <End Role="T_PermintaanPekerjaan" Type="Self.T_PermintaanPekerjaan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_Status">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="T_PermintaanPekerjaan">
+              <PropertyRef Name="status_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_RigMaterialMovement_M_Transporter">
+          <End Role="M_Transporter" Type="Self.M_Transporter" Multiplicity="0..1" />
+          <End Role="T_RigMaterialMovement" Type="Self.T_RigMaterialMovement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_Transporter">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="T_RigMaterialMovement">
+              <PropertyRef Name="transporter_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_RigMaterialMovementDetail_T_RigMaterialMovement">
+          <End Role="T_RigMaterialMovement" Type="Self.T_RigMaterialMovement" Multiplicity="0..1" />
+          <End Role="T_RigMaterialMovementDetail" Type="Self.T_RigMaterialMovementDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_RigMaterialMovement">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="T_RigMaterialMovementDetail">
+              <PropertyRef Name="rig_material_movement_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DB_RMMModelStoreContainer">
+          <EntitySet Name="M_Approver" EntityType="Self.M_Approver" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="M_Area" EntityType="Self.M_Area" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="M_FaktorKeterlambatan" EntityType="Self.M_FaktorKeterlambatan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="M_Rig" EntityType="Self.M_Rig" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="M_Role" EntityType="Self.M_Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="M_RoleManagement" EntityType="Self.M_RoleManagement" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="M_Status" EntityType="Self.M_Status" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="M_Transporter" EntityType="Self.M_Transporter" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_PermintaanPekerjaan" EntityType="Self.T_PermintaanPekerjaan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_PermintaanPekerjaanDetail" EntityType="Self.T_PermintaanPekerjaanDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_RigMaterialMovement" EntityType="Self.T_RigMaterialMovement" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_RigMaterialMovementDetail" EntityType="Self.T_RigMaterialMovementDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VW_AREA" EntityType="Self.VW_AREA" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VW_AREA].[id] AS [id], 
+    [VW_AREA].[name] AS [name]
+    FROM [dbo].[VW_AREA] AS [VW_AREA]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VW_FAKTORKETERLAMBATAN" EntityType="Self.VW_FAKTORKETERLAMBATAN" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VW_FAKTORKETERLAMBATAN].[id] AS [id], 
+    [VW_FAKTORKETERLAMBATAN].[name] AS [name]
+    FROM [dbo].[VW_FAKTORKETERLAMBATAN] AS [VW_FAKTORKETERLAMBATAN]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VW_RIG" EntityType="Self.VW_RIG" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VW_RIG].[id] AS [id], 
+    [VW_RIG].[area_id] AS [area_id], 
+    [VW_RIG].[name] AS [name]
+    FROM [dbo].[VW_RIG] AS [VW_RIG]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VW_STATUS" EntityType="Self.VW_STATUS" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VW_STATUS].[id] AS [id], 
+    [VW_STATUS].[name] AS [name]
+    FROM [dbo].[VW_STATUS] AS [VW_STATUS]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_M_Rig_M_Area" Association="Self.FK_M_Rig_M_Area">
+            <End Role="M_Area" EntitySet="M_Area" />
+            <End Role="M_Rig" EntitySet="M_Rig" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_PermintaanPekerjaan_M_Status" Association="Self.FK_T_PermintaanPekerjaan_M_Status">
+            <End Role="M_Status" EntitySet="M_Status" />
+            <End Role="T_PermintaanPekerjaan" EntitySet="T_PermintaanPekerjaan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_RigMaterialMovement_M_Transporter" Association="Self.FK_T_RigMaterialMovement_M_Transporter">
+            <End Role="M_Transporter" EntitySet="M_Transporter" />
+            <End Role="T_RigMaterialMovement" EntitySet="T_RigMaterialMovement" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_RigMaterialMovementDetail_T_RigMaterialMovement" Association="Self.FK_T_RigMaterialMovementDetail_T_RigMaterialMovement">
+            <End Role="T_RigMaterialMovement" EntitySet="T_RigMaterialMovement" />
+            <End Role="T_RigMaterialMovementDetail" EntitySet="T_RigMaterialMovementDetail" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DB_RMMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="M_Area">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="M_Rig" Relationship="Self.FK_M_Rig_M_Area" FromRole="M_Area" ToRole="M_Rig" />
+        </EntityType>
+        <EntityType Name="M_FaktorKeterlambatan">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="M_Rig">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="area_id" Type="Int32" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="M_Area" Relationship="Self.FK_M_Rig_M_Area" FromRole="M_Rig" ToRole="M_Area" />
+        </EntityType>
+        <EntityType Name="M_Role">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="last_modified_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="last_modified_date" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="M_RoleManagement">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="role_id" Type="Int32" />
+          <Property Name="last_modified_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="last_modified_date" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="M_Status">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="last_modified_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="last_modified_date" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="T_PermintaanPekerjaan" Relationship="DB_RMMModel.FK_T_PermintaanPekerjaan_M_Status" FromRole="M_Status" ToRole="T_PermintaanPekerjaan" />
+        </EntityType>
+        <EntityType Name="M_Transporter">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="last_modified_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="last_modified_date" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="T_RigMaterialMovement" Relationship="Self.FK_T_RigMaterialMovement_M_Transporter" FromRole="M_Transporter" ToRole="T_RigMaterialMovement" />
+        </EntityType>
+        <EntityType Name="T_PermintaanPekerjaanDetail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="permintaan_pekerjaan_id" Type="Int32" Nullable="false" />
+          <Property Name="tanggal" Type="DateTime" Precision="3" />
+          <Property Name="notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="last_modified_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="last_modified_date" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="T_RigMaterialMovement">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="area" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="rig" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="rute_dari" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="rute_ke" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="jarak" Type="Double" />
+          <Property Name="transporter_id" Type="Int32" />
+          <Property Name="tanggal_mulai" Type="DateTime" Precision="3" />
+          <Property Name="target_hari" Type="Int32" />
+          <Property Name="target_trip" Type="Int32" />
+          <Property Name="biaya" Type="Int64" />
+          <Property Name="last_modified_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="last_modified_date" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="M_Transporter" Relationship="Self.FK_T_RigMaterialMovement_M_Transporter" FromRole="T_RigMaterialMovement" ToRole="M_Transporter" />
+          <NavigationProperty Name="T_RigMaterialMovementDetail" Relationship="Self.FK_T_RigMaterialMovementDetail_T_RigMaterialMovement" FromRole="T_RigMaterialMovement" ToRole="T_RigMaterialMovementDetail" />
+        </EntityType>
+        <EntityType Name="T_RigMaterialMovementDetail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="rig_material_movement_id" Type="Int32" />
+          <Property Name="trip_move_out" Type="Int32" />
+          <Property Name="trip_move_in" Type="Int32" />
+          <Property Name="kendala" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="tindak_lanjut" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="tanggal_move" Type="DateTime" Precision="3" />
+          <Property Name="faktor_keterlambatan" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="last_modified_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="last_modified_date" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="T_RigMaterialMovement" Relationship="Self.FK_T_RigMaterialMovementDetail_T_RigMaterialMovement" FromRole="T_RigMaterialMovementDetail" ToRole="T_RigMaterialMovement" />
+        </EntityType>
+        <Association Name="FK_M_Rig_M_Area">
+          <End Role="M_Area" Type="Self.M_Area" Multiplicity="0..1" />
+          <End Role="M_Rig" Type="Self.M_Rig" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_Area">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="M_Rig">
+              <PropertyRef Name="area_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_RigMaterialMovement_M_Transporter">
+          <End Role="M_Transporter" Type="Self.M_Transporter" Multiplicity="0..1" />
+          <End Role="T_RigMaterialMovement" Type="Self.T_RigMaterialMovement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_Transporter">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="T_RigMaterialMovement">
+              <PropertyRef Name="transporter_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_T_RigMaterialMovementDetail_T_RigMaterialMovement">
+          <End Role="T_RigMaterialMovement" Type="Self.T_RigMaterialMovement" Multiplicity="0..1" />
+          <End Role="T_RigMaterialMovementDetail" Type="Self.T_RigMaterialMovementDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="T_RigMaterialMovement">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="T_RigMaterialMovementDetail">
+              <PropertyRef Name="rig_material_movement_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="M_Area" EntityType="Self.M_Area" />
+          <EntitySet Name="M_FaktorKeterlambatan" EntityType="Self.M_FaktorKeterlambatan" />
+          <EntitySet Name="M_Rig" EntityType="Self.M_Rig" />
+          <EntitySet Name="M_Role" EntityType="Self.M_Role" />
+          <EntitySet Name="M_RoleManagement" EntityType="Self.M_RoleManagement" />
+          <EntitySet Name="M_Status" EntityType="Self.M_Status" />
+          <EntitySet Name="M_Transporter" EntityType="Self.M_Transporter" />
+          <EntitySet Name="T_PermintaanPekerjaanDetail" EntityType="Self.T_PermintaanPekerjaanDetail" />
+          <EntitySet Name="T_RigMaterialMovement" EntityType="Self.T_RigMaterialMovement" />
+          <EntitySet Name="T_RigMaterialMovementDetail" EntityType="Self.T_RigMaterialMovementDetail" />
+          <AssociationSet Name="FK_M_Rig_M_Area" Association="Self.FK_M_Rig_M_Area">
+            <End Role="M_Area" EntitySet="M_Area" />
+            <End Role="M_Rig" EntitySet="M_Rig" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_RigMaterialMovement_M_Transporter" Association="Self.FK_T_RigMaterialMovement_M_Transporter">
+            <End Role="M_Transporter" EntitySet="M_Transporter" />
+            <End Role="T_RigMaterialMovement" EntitySet="T_RigMaterialMovement" />
+          </AssociationSet>
+          <AssociationSet Name="FK_T_RigMaterialMovementDetail_T_RigMaterialMovement" Association="Self.FK_T_RigMaterialMovementDetail_T_RigMaterialMovement">
+            <End Role="T_RigMaterialMovement" EntitySet="T_RigMaterialMovement" />
+            <End Role="T_RigMaterialMovementDetail" EntitySet="T_RigMaterialMovementDetail" />
+          </AssociationSet>
+          <EntitySet Name="M_Approver" EntityType="DB_RMMModel.M_Approver" />
+          <EntitySet Name="T_PermintaanPekerjaan" EntityType="DB_RMMModel.T_PermintaanPekerjaan" />
+          <AssociationSet Name="FK_T_PermintaanPekerjaan_M_Status" Association="DB_RMMModel.FK_T_PermintaanPekerjaan_M_Status">
+            <End Role="M_Status" EntitySet="M_Status" />
+            <End Role="T_PermintaanPekerjaan" EntitySet="T_PermintaanPekerjaan" />
+          </AssociationSet>
+          <EntitySet Name="VW_AREA" EntityType="DB_RMMModel.VW_AREA" />
+          <EntitySet Name="VW_FAKTORKETERLAMBATAN" EntityType="DB_RMMModel.VW_FAKTORKETERLAMBATAN" />
+          <EntitySet Name="VW_RIG" EntityType="DB_RMMModel.VW_RIG" />
+          <EntitySet Name="VW_STATUS" EntityType="DB_RMMModel.VW_STATUS" />
+        </EntityContainer>
+        <EntityType Name="M_Approver">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="T_PermintaanPekerjaan">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="no_wo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="no_activity" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="judul_pekerjaan" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="tanggal_pekerjaan" Type="DateTime" Precision="0" />
+          <Property Name="lokasi_asal" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="cp_lokasi_asal" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="lokasi_tujuan" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="cp_lokasi_tujuan" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="detail_barang" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="approver" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="keterangan" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="last_modified_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="last_modified_date" Type="DateTime" Precision="3" />
+          <Property Name="status_id" Type="Int32" />
+          <Property Name="finished_by" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="approved_by" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="approved_date" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="M_Status" Relationship="DB_RMMModel.FK_T_PermintaanPekerjaan_M_Status" FromRole="T_PermintaanPekerjaan" ToRole="M_Status" />
+        </EntityType>
+        <Association Name="FK_T_PermintaanPekerjaan_M_Status">
+          <End Type="DB_RMMModel.M_Status" Role="M_Status" Multiplicity="0..1" />
+          <End Type="DB_RMMModel.T_PermintaanPekerjaan" Role="T_PermintaanPekerjaan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="M_Status">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="T_PermintaanPekerjaan">
+              <PropertyRef Name="status_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="VW_AREA">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="11" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="VW_FAKTORKETERLAMBATAN">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="VW_RIG">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="area_id" />
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="area_id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="VW_STATUS">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="11" FixedLength="false" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DB_RMMModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="M_Area">
+            <EntityTypeMapping TypeName="DB_RMMModel.M_Area">
+              <MappingFragment StoreEntitySet="M_Area">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M_FaktorKeterlambatan">
+            <EntityTypeMapping TypeName="DB_RMMModel.M_FaktorKeterlambatan">
+              <MappingFragment StoreEntitySet="M_FaktorKeterlambatan">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M_Rig">
+            <EntityTypeMapping TypeName="DB_RMMModel.M_Rig">
+              <MappingFragment StoreEntitySet="M_Rig">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="area_id" ColumnName="area_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M_Role">
+            <EntityTypeMapping TypeName="DB_RMMModel.M_Role">
+              <MappingFragment StoreEntitySet="M_Role">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="last_modified_by" ColumnName="last_modified_by" />
+                <ScalarProperty Name="last_modified_date" ColumnName="last_modified_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M_RoleManagement">
+            <EntityTypeMapping TypeName="DB_RMMModel.M_RoleManagement">
+              <MappingFragment StoreEntitySet="M_RoleManagement">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="role_id" ColumnName="role_id" />
+                <ScalarProperty Name="last_modified_by" ColumnName="last_modified_by" />
+                <ScalarProperty Name="last_modified_date" ColumnName="last_modified_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M_Status">
+            <EntityTypeMapping TypeName="DB_RMMModel.M_Status">
+              <MappingFragment StoreEntitySet="M_Status">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="last_modified_by" ColumnName="last_modified_by" />
+                <ScalarProperty Name="last_modified_date" ColumnName="last_modified_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M_Transporter">
+            <EntityTypeMapping TypeName="DB_RMMModel.M_Transporter">
+              <MappingFragment StoreEntitySet="M_Transporter">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="last_modified_by" ColumnName="last_modified_by" />
+                <ScalarProperty Name="last_modified_date" ColumnName="last_modified_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_PermintaanPekerjaanDetail">
+            <EntityTypeMapping TypeName="DB_RMMModel.T_PermintaanPekerjaanDetail">
+              <MappingFragment StoreEntitySet="T_PermintaanPekerjaanDetail">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="permintaan_pekerjaan_id" ColumnName="permintaan_pekerjaan_id" />
+                <ScalarProperty Name="tanggal" ColumnName="tanggal" />
+                <ScalarProperty Name="notes" ColumnName="notes" />
+                <ScalarProperty Name="last_modified_by" ColumnName="last_modified_by" />
+                <ScalarProperty Name="last_modified_date" ColumnName="last_modified_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_RigMaterialMovement">
+            <EntityTypeMapping TypeName="DB_RMMModel.T_RigMaterialMovement">
+              <MappingFragment StoreEntitySet="T_RigMaterialMovement">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="area" ColumnName="area" />
+                <ScalarProperty Name="rig" ColumnName="rig" />
+                <ScalarProperty Name="rute_dari" ColumnName="rute_dari" />
+                <ScalarProperty Name="rute_ke" ColumnName="rute_ke" />
+                <ScalarProperty Name="jarak" ColumnName="jarak" />
+                <ScalarProperty Name="transporter_id" ColumnName="transporter_id" />
+                <ScalarProperty Name="tanggal_mulai" ColumnName="tanggal_mulai" />
+                <ScalarProperty Name="target_hari" ColumnName="target_hari" />
+                <ScalarProperty Name="target_trip" ColumnName="target_trip" />
+                <ScalarProperty Name="biaya" ColumnName="biaya" />
+                <ScalarProperty Name="last_modified_by" ColumnName="last_modified_by" />
+                <ScalarProperty Name="last_modified_date" ColumnName="last_modified_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_RigMaterialMovementDetail">
+            <EntityTypeMapping TypeName="DB_RMMModel.T_RigMaterialMovementDetail">
+              <MappingFragment StoreEntitySet="T_RigMaterialMovementDetail">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="rig_material_movement_id" ColumnName="rig_material_movement_id" />
+                <ScalarProperty Name="trip_move_out" ColumnName="trip_move_out" />
+                <ScalarProperty Name="trip_move_in" ColumnName="trip_move_in" />
+                <ScalarProperty Name="kendala" ColumnName="kendala" />
+                <ScalarProperty Name="tindak_lanjut" ColumnName="tindak_lanjut" />
+                <ScalarProperty Name="tanggal_move" ColumnName="tanggal_move" />
+                <ScalarProperty Name="faktor_keterlambatan" ColumnName="faktor_keterlambatan" />
+                <ScalarProperty Name="last_modified_by" ColumnName="last_modified_by" />
+                <ScalarProperty Name="last_modified_date" ColumnName="last_modified_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="M_Approver">
+            <EntityTypeMapping TypeName="DB_RMMModel.M_Approver">
+              <MappingFragment StoreEntitySet="M_Approver">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_PermintaanPekerjaan">
+            <EntityTypeMapping TypeName="DB_RMMModel.T_PermintaanPekerjaan">
+              <MappingFragment StoreEntitySet="T_PermintaanPekerjaan">
+                <ScalarProperty Name="approved_date" ColumnName="approved_date" />
+                <ScalarProperty Name="approved_by" ColumnName="approved_by" />
+                <ScalarProperty Name="finished_by" ColumnName="finished_by" />
+                <ScalarProperty Name="status_id" ColumnName="status_id" />
+                <ScalarProperty Name="last_modified_date" ColumnName="last_modified_date" />
+                <ScalarProperty Name="last_modified_by" ColumnName="last_modified_by" />
+                <ScalarProperty Name="keterangan" ColumnName="keterangan" />
+                <ScalarProperty Name="approver" ColumnName="approver" />
+                <ScalarProperty Name="detail_barang" ColumnName="detail_barang" />
+                <ScalarProperty Name="cp_lokasi_tujuan" ColumnName="cp_lokasi_tujuan" />
+                <ScalarProperty Name="lokasi_tujuan" ColumnName="lokasi_tujuan" />
+                <ScalarProperty Name="cp_lokasi_asal" ColumnName="cp_lokasi_asal" />
+                <ScalarProperty Name="lokasi_asal" ColumnName="lokasi_asal" />
+                <ScalarProperty Name="tanggal_pekerjaan" ColumnName="tanggal_pekerjaan" />
+                <ScalarProperty Name="judul_pekerjaan" ColumnName="judul_pekerjaan" />
+                <ScalarProperty Name="no_activity" ColumnName="no_activity" />
+                <ScalarProperty Name="no_wo" ColumnName="no_wo" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VW_AREA">
+            <EntityTypeMapping TypeName="DB_RMMModel.VW_AREA">
+              <MappingFragment StoreEntitySet="VW_AREA">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VW_FAKTORKETERLAMBATAN">
+            <EntityTypeMapping TypeName="DB_RMMModel.VW_FAKTORKETERLAMBATAN">
+              <MappingFragment StoreEntitySet="VW_FAKTORKETERLAMBATAN">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VW_RIG">
+            <EntityTypeMapping TypeName="DB_RMMModel.VW_RIG">
+              <MappingFragment StoreEntitySet="VW_RIG">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="area_id" ColumnName="area_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VW_STATUS">
+            <EntityTypeMapping TypeName="DB_RMMModel.VW_STATUS">
+              <MappingFragment StoreEntitySet="VW_STATUS">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

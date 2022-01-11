@@ -1,0 +1,165 @@
+﻿@using RigMaterialMovementWeb.ViewModel
+@model LoginViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title>Rig Material Movement - PDSI</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="@Url.Content("~/Content/images/icons/favicon.ico")" />
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/css/bootstrap.min.css")">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/css/font-awesome.min.css")">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/css/material-design-iconic-font.min.css")">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/css/animate.css")" />
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/css/hamburgers.min.css")">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/css/animsition.min.css")">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/css/util.css")">
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/css/main.css")">
+    <!--===============================================================================================-->
+    <script src="@Url.Content("~/Scripts/jquery.min.js")"></script>
+    <script>
+    function contentChange(sender) {
+            if (sender.value != '' && sender.value != undefined) {
+                sender.classList.add('has-val');
+            } else {
+                sender.classList.remove('has-val');
+            }
+        }</script>
+    <style>
+
+        .login-pagestyle {
+            background-image: url();
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            -webkit-background-size: cover;
+            background-size: cover;
+            z-index: 1;
+        }
+
+        input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+            background-color: white !important;
+            background-image: none !important;
+            color: rgb(0, 0, 0) !important;
+        }
+    </style>
+
+</head>
+<body>
+    @*<div class="container-fluid">
+            <div class="row">
+
+                <div class="col-md-4 col-md-offset-4">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Log In</div>
+                        <div class="panel-body">
+                            @using (Html.BeginForm("Login", "Login", new { ReturnUrl = Request.QueryString["ReturnUrl"] }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="row">
+                                    <div class="form-group">
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.Username)
+                                    @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.Password)
+                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-success btn-block"><span class="fa fa-sign-in"></span> Sign In</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    <header class="main-header">
+        <nav class="navbar navbar-inverse navbar-static-top" role="navigation" style="background-color:#da251c; color:#ffffff; font-size:11px; border-color:#ffffff">
+            <div class="container-fluid" style="background-color: #ffffff;">
+                <div class="navbar-header">
+                    <a href="#" class="navbar-brand">
+                        <img src='@Url.Content("~/Content/Images/LOGO-PDSI-2014-horizontal.jpg")' style="height:300%;background-color: #fff;" />
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container-fluid" style="margin-top:-2%">
+        <h4 class="text-center">Use a local account to log in.</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <p>Log In <span class="glyphicon glyphicon-lock"></span></p>
+                    </div>
+                    <div class="panel-body">
+                        @using (Html.BeginForm("Login", "Login", new { ReturnUrl = Request.QueryString["ReturnUrl"] }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="row">
+                                <div class="form-group">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Username)
+                                @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Password)
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success btn-block"><span class="fa fa-sign-in"></span> Sign In</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <footer class="main-footer" style="margin-left:0px;margin-top:5%">
+        <div class="separator">
+            <div class="red"></div>
+            <div class="green"></div>
+            <div class="blue"></div>
+        </div>
+        <div class="col-md-12">
+            <div class="container" style="padding-top:1%">
+                <p style="text-align:center">
+                    <strong>PT. PERTAMINA DRILLING SERVICES INDONESIA</strong><br />
+                    Graha PDSI, Jl. Matraman Raya No.87 Jakarta - 13140 Indonesia<br />
+                    Phone : (+62)(21) 2995 5300 - Fax : (+62)(21) 29563 148<br />
+                </p>
+            </div>
+        </div>
+    </footer>
+    
+
+</body>
+</html>

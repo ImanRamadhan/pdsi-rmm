@@ -1,0 +1,262 @@
+﻿@model List<RigMaterialMovementWeb.Models.RigMaterialMovementList>
+
+
+@{
+    ViewBag.Title = "Edit";
+
+}
+<head>
+
+    <script src="~/Scripts/EditExisting.js"></script>
+
+    <style>
+    </style>
+</head>
+
+<input type="hidden" id="txtviewbag" name="tanggal" class="form-control input-sm" value="@ViewBag.test" />
+
+
+<div class="container">
+    <h3>Rig Movement/Mobilization</h3>
+    <div class="form-horizontal">
+        <div class="form-group">
+
+            <div class="row col-lg-7" style="margin-top:1%">
+                <label class="col-lg-3">Area</label>
+                <select class="form-control input-sm" name="transporter" id="ddlarea">
+                    <option value="@ViewBag.Datanya[0].area">@ViewBag.Datanya[0].area</option>
+                    @foreach (var item in ViewBag.area)
+                    {
+                        <option value="@item.name">@item.name</option>
+
+                    }
+                </select>
+            </div>
+
+            <div class="row col-lg-7" style="margin-top:1%">
+                <label class="col-lg-3">RIG</label>
+                <select class="form-control input-sm" name="transporter" id="ddlrig">
+                    <option value="@ViewBag.Datanya[0].rig">@ViewBag.Datanya[0].rig</option>
+
+                </select>
+
+            </div>
+
+            <div class="row col-lg-7" style="margin-top:1%">
+                <h4>ROUTE</h4>
+                <label class="col-lg-3">Dari</label>
+                <input class="form-control input-sm" type="text" id="txtrutedari" value="@ViewBag.Datanya[0].rute_dari" />
+
+            </div>
+            <div class="row col-lg-7" style="margin-top:1%">
+                <label class="col-lg-3">Ke</label>
+                <input class="form-control input-sm" type="text" id="txtke" value="@ViewBag.Datanya[0].rute_ke" />
+            </div>
+            <div class="row col-lg-7" style="margin-top:1%">
+                <label class="col-lg-3">Jarak (Km)</label>
+                <input class="form-control input-sm" type="text" id="txtjarak" value="@ViewBag.Datanya[0].jarak" />
+            </div>
+            <div class="row col-lg-7" style="margin-top:1%">
+                <label class="col-lg-3">Biaya</label>
+                <input class="form-control input-sm" type="text" id="txtbiaya" value="@ViewBag.Datanya[0].biaya" />
+            </div>
+
+            <input type="hidden" name="txtIDEdit" id="txtIDEdit" />
+
+            <div class="row col-lg-7" style="margin-top:1%">
+                <label class="col-lg-3">Transporter</label>
+                <select class="form-control input-sm" name="transporter" id="ddltransporter" value="@ViewBag.Datanya[0].transporter_id">
+                    <option value="@ViewBag.Datanya[0].transporter_id">@ViewBag.Datanya[0].transporter</option>
+                    @foreach (var item in ViewBag.datavm2)
+                    {
+                        <option value="@item.id">@item.name</option>
+
+                    }
+                </select>
+            </div>
+
+            <div class="row col-lg-7" style="margin-top:1%">
+                <h4>MULAI (H-1 MOVING)</h4>
+                <label class="col-lg-3">Tanggal Mulai</label>
+                <input class="form-control input-sm" type="text" id="txttanggal2" value="@ViewBag.Datanya[0].tanggal_mulai.ToString("yyyy-MM-dd HH:mm")" />
+            </div>
+
+            <div class="row col-lg-7" style="margin-top:1%">
+                <h4>TARGET</h4>
+                <label class="col-lg-3">Hari Pjp</label>
+                <input class="form-control input-sm" type="text" id="txtharipjp" value="@ViewBag.Datanya[0].target_hari" />
+            </div>
+
+            <div class="row col-lg-7" style="margin-top:1%">
+                <label class="col-lg-3">Est Trip</label>
+                <input class="form-control input-sm" type="text" id="txttrip" value="@ViewBag.Datanya[0].target_trip" />
+            </div>
+
+            <div class="row col-lg-7" style="margin-top:3%">
+                @*<div class="col-lg-2">
+                <button onclick="Search();" type="button" class="btn btn-sm btn-success" style="background-color:#a6c218; border-color:#a6c218">Search &nbsp;<i class="glyphicon glyphicon-search"></i></button>
+            </div>*@
+                <div class="col-lg-3">
+                    <button class="btn btn-success" type="button" style="background-color:#a6c218; color:white;" id="hideCreateasd" onclick="PopUp()">Add</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ModalRig" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="width:100vh">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">New Data</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-danger">
+                            <div class="panel-body">
+                                <form name="myform" id="myform" class="form-horizontal" method="post" action="">
+                                    <input type="hidden" name="id" id="id" />
+                                    <div class="form-group">
+                                        <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">MoveOut</label>
+
+                                        <input id="txtmoveout" name="tanggal" class="form-control input-sm" type="text" />
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">MoveIn</label>
+
+                                        <input id="txtmovein" name="tanggal" class="form-control input-sm" type="text" />
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">Kendala</label>
+
+
+                                        <textarea id="txtkendala" name="Deskripsi" class="form-control input-sm" type="text"></textarea>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">Tindak Lanjut</label>
+
+                                        <textarea id="txttindaklanjut" name="Deskripsi" class="form-control input-sm" type="text"></textarea>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">Faktor Keterlambatan</label>
+
+                                        <select class="form-control input-sm" name="transporter" id="ddlketerlambatan">
+                                            <option value=""> </option>
+                                            @foreach (var item in ViewBag.datavm7)
+                                            {
+                                                <option value="@item.name">@item.name</option>
+
+                                            }
+                                        </select>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px" autocomplete="off">Tanggal Move</label>
+
+                                        <input id="txttglmove" name="tanggalaqqqq" class="form-control " type="text" autocomplete="off" />
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-4 col-sm-8">
+                                            <button class="btn btn-success" type="button" style="background-color:#a6c218; color:white;" id="hideCreate" onclick="SubmitRigMovementDetails()">Save</button>
+                                            <button class="btn btn-success" type="button" style="background-color:#a6c218; color:white;" id="hideEdit" onclick="EditRigMovement()">Save</button>
+                                            @*<button class="btn btn-success" type="button" style="background-color:#a6c218; color:blue;" id="hideEdit" onclick="EditEngineeringEstimateSubmit()">Submit</button>*@
+                                            <button class="btn btn-default" type="button" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table id="List" class="table table-striped table-bordered table-responsive">
+                <thead>
+                    <tr class="btn-primary">
+                        <th></th>
+                        <th>Tanggal Move</th>
+                        <th>Trip Move Out</th>
+                        <th>Trip Move In</th>
+                        <th>Kendala</th>
+                        <th>Tindak Lanjut</th>
+                        <th>Faktor Keterlambatan</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+
+                                <a class="btn btn-sm btn-default" onclick="OpenModal('EditRigMovement', '@item.id')"> <i class="glyphicon glyphicon-pencil" style="font-size:16px;cursor:pointer"></i> </a>
+                                <a class="btn btn-sm btn-default" onclick="OpenModal('DeleteRigMovement', '@item.id')"> <i class="glyphicon glyphicon-trash" style="font-size:16px;cursor:pointer"></i> </a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.tanggal_move)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.trip_move_out)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.trip_move_in)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.kendala)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.tindaklanjut)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.faktorketerlambatan)
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <button class="btn btn-success" type="button" style="background-color:#a6c218; color:white;" id="hideCreate" onclick="SaveParent()">Save</button>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+                   var GetDDL = '@Url.Action("CreateDDL" ,"RigMaterial")';
+    var UrlDelete = '@Url.Action("DeleteRigMaterialDetail", "RigMaterial")';
+    var UrlCreateDetails = '@Url.Action("CreateRigMaterialDetails" ,"RigMaterial")';
+    var UrlGet = '@Url.Action("EditExisting", "RigMaterial")';
+    var UrlGetDetail = '@Url.Action("GetEditListDetail", "RigMaterial")';
+    var UrlEdit = '@Url.Action("EditRigMaterialDetail", "RigMaterial")';
+    var UrlEditParent = '@Url.Action("EditRigMaterialParent", "RigMaterial")';
+    var UrlCreateDetail = '@Url.Action("CreateRigMaterialDetail" ,"RigMaterial")';
+
+    var datanya = '@ViewBag.Datanya'
+</script>

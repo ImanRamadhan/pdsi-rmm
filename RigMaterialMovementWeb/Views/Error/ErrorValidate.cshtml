@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "ErrorValidate";
+    Layout = "~/Views/Shared/Error.cshtml";
+}
+
+<style>
+    .linkButton {
+        background-color: #da251c;
+        color: white;
+        padding: 14px 25px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+    }
+</style>
+
+<div class="container" style="margin-top:10vh;width:727px;margin-right:240px">
+    <div class="row" style="text-align:center; color:black">
+        <div class="column" style="margin-top:60px">
+            <h5 style="margin-left:60px"><img src="~/Content/Images/not_authenticated.png" style="width:279px;height:200px;" /></h5>
+           
+        </div>
+    </div>
+    <div class="column" style="width: 52%;margin-top:10px">
+        <h1 style="margin-left:153px;font-size:22px;width:466px;text-align:center">
+            Sorry you don't have an Authorization to access this page!
+        </h1>
+        <h3 style="margin-left:187px;font-size:18px;width:400px;text-align:center">
+            <a class="linkButton" href="@Url.Action("Index", "Home")">Home</a>
+        </h3>
+    </div>
+
+
+</div>
+
