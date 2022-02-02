@@ -1,5 +1,4 @@
 ﻿$(document).ready(function () {
-
     $("#ddlarea").on("change", function () {
         var Name = $(this).val();
         $.getJSON("../LaporanRekapData/GetDDLRig", { name: Name },
@@ -33,12 +32,8 @@
         autoclose: true
     });
 
-
-
-
-
     $("#txtbiaya").inputFilter(function (value) {
-        return /^\d*$/.test(value);    // Allow digits only, using a RegExp
+        return /^[0-9,]*$/.test(value);    // Allow digits only, using a RegExp
     });
     $("#txtmoveout").inputFilter(function (value) {
         return /^\d*$/.test(value);    // Allow digits only, using a RegExp
@@ -56,13 +51,12 @@
 });
 
 
-
-
 function SubmitRigMovement() {
 
     if (ValidationParent()) {
+        let biaya = $('#txtbiaya').val();
+        let newBiaya = biaya.replace(/\,/g, '');
 
-       
         var hostname = location.pathname;
         var res = hostname.replace("/Create", "");
         var full = res + '/Edit'
@@ -75,7 +69,7 @@ function SubmitRigMovement() {
             rute_ke: $('#txtke').val(),
             jarak: $('#txtjarak').val(),
             transporter_id: $('#ddltransporter').val(),
-            biaya: $('#txtbiaya').val(),
+            biaya: newBiaya,
             target_hari: $('#txtharipjp').val(),
             target_trip: $('#txttrip').val(),
             jam: $('#txtjam').val(),

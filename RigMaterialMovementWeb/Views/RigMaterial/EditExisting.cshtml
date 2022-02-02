@@ -134,19 +134,6 @@
 
                                     </div>
                                     <div class="form-group">
-                                        <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">Kendala</label>
-
-
-                                        <textarea id="txtkendala" name="Deskripsi" class="form-control input-sm" type="text"></textarea>
-
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">Tindak Lanjut</label>
-
-                                        <textarea id="txttindaklanjut" name="Deskripsi" class="form-control input-sm" type="text"></textarea>
-
-                                    </div>
-                                    <div class="form-group">
                                         <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">Faktor Keterlambatan</label>
 
                                         <select class="form-control input-sm" name="transporter" id="ddlketerlambatan">
@@ -157,6 +144,20 @@
 
                                             }
                                         </select>
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">Kendala</label>
+
+
+                                        <textarea id="txtkendala" name="Deskripsi" class="form-control input-sm" type="text"></textarea>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">Tindak Lanjut</label>
+
+                                        <textarea id="txttindaklanjut" name="Deskripsi" class="form-control input-sm" type="text"></textarea>
 
                                     </div>
                                     <div class="form-group">
@@ -249,7 +250,40 @@
 
 
 <script type="text/javascript">
-                   var GetDDL = '@Url.Action("CreateDDL" ,"RigMaterial")';
+    $(document).ready(function () {
+
+        // Format mata uang.
+        $('#txtbiaya').mask('000,000,000', { reverse: true });
+
+    })
+    $(function () {
+        $("#txtbiaya").keyup(function (e) {
+            $(this).val(format($(this).val()));
+        });
+    });
+
+    /* Fungsi formatRupiah */
+    var format = function (num) {
+        var str = num.toString().replace("", ""), parts = false, output = [], i = 1, formatted = null;
+        if (str.indexOf(".") > 0) {
+            parts = str.split(".");
+            str = parts[0];
+        }
+        str = str.split("").reverse();
+        for (var j = 0, len = str.length; j < len; j++) {
+            if (str[j] != ",") {
+                output.push(str[j]);
+                if (i % 3 == 0 && j < (len - 1)) {
+                    output.push(",");
+                }
+                i++;
+            }
+        }
+        formatted = output.reverse().join("");
+        return ("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
+    };
+
+    var GetDDL = '@Url.Action("CreateDDL" ,"RigMaterial")';
     var UrlDelete = '@Url.Action("DeleteRigMaterialDetail", "RigMaterial")';
     var UrlCreateDetails = '@Url.Action("CreateRigMaterialDetails" ,"RigMaterial")';
     var UrlGet = '@Url.Action("EditExisting", "RigMaterial")';

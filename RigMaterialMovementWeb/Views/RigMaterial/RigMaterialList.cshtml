@@ -13,6 +13,26 @@
     <title>Rig Movement/Mobilization</title>
 
 </head>
+<style>
+    .container-frame {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        padding-top: 56.25%;
+        /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
+    }
+
+    /* Then style the iframe to fit in the container div with full height and width */
+    .responsive-iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+    }
+</style>
 <body>
 
     <h3>Rig Movement/Mobilization</h3>
@@ -81,10 +101,11 @@
 
 
     <div class="form-horizontal">
-        <button onclick="FilterPermintaanPekerjaan()" type="button" class="btn btn-sm btn-success" style="background-color:blue; border-color:blue"><i class="glyphicon glyphicon-search"></i>Search</button>
+        <button onclick="FilterPermintaanPekerjaan()" type="button" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-search"></i>Search</button>
     </div><br />
     <div class="form-horizontal">
-        <button onclick="location.href='@Url.Action("Create", "RigMaterial")'" type="button" class="btn btn-sm btn-success" style="background-color:#a6c218; border-color:#a6c218"><i class="glyphicon glyphicon-file"></i>Create New</button>
+        <button onclick="location.href='@Url.Action("Create", "RigMaterial")'" type="button" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-file"></i>Create New</button>
+        <button id="btnexport" onclick="exportToExcel();" type="button" class="btn btn-sm btn-success">Export to Excell&nbsp;<i class="glyphicon glyphicon-file"></i></button>
     </div>
 
     <div class="panel panel-default">
@@ -138,9 +159,6 @@
 </html>
 <script>
     $(document).ready(function () {
-
-
-
           $("#ddlareasrc").on("change", function () {
                 var Name = $(this).val();
                 $.getJSON("../LaporanRekapData/GetDDLRig", { name: Name },
@@ -172,13 +190,13 @@
 
     });
     $("#txttglpekerjaansrcend").datepicker({
-       
+
     });
- 
+
     var hostname = location.pathname;
     var res = hostname.replace("/RigMaterialList", "");
     var full = res + '/EditExisting'
-  
+
 
         var role = $('#txtapproval').val()
 
@@ -198,7 +216,8 @@
                     {
                         "data": "id", className: 'center', 'searchable': false, orderable: false, render: function (data, type, row, meta) {
                             return '<a href="' + full + "?param=" + row.id + '"><button type="button" class="btn btn-success"><span class="fa fa-pencil"></span></button></a>&nbsp' +
-                                '<button type="button" class="btn btn-danger" onclick="deleteTransporter(' + row.id + ')"><i class="fa fa-trash-o"></i></button>'
+                                '<button type="button" class="btn btn-danger" onclick="deleteTransporter(' + row.id + ')"><i class="fa fa-trash-o"></i></button>' +
+                                '<button type="button" class="btn btn-info" onclick="excellFrame(' + row.id + ')"><i class="fa fa-search"></i></button>'
                         }
                     },
                     { "data": 'area' },
@@ -288,9 +307,149 @@
             }).draw();
 
 
-});
+    });
 
-     function deleteTransporter(ID) {
+    function excellFrame(ID) {
+        let url = "https://pdsi.pertamina.com/bisnis-kami#produk-jasa";
+        var win = window.open();
+        win.document.write('<div style="position: relative;overflow: hidden;width: 100%;padding-top: 56.25%;"><iframe style="position: absolute;top: 0;left: 0;bottom: 0;right: 0;width: 100%;height: 100%;" src="' + url + '" frameborder="0" allowfullscreen></iframe></div>')
+    }
+
+    function persentase(persenData) {
+        var num = Number(persenData) // The Number() only visualizes the type and is not needed
+        var roundedString = num.toFixed(2);
+        var rounded = Number(roundedString) + "%"; // toFixed() returns a string (often suitable for printing already)
+        return rounded;
+    }
+
+    function formatIDR(dataIDR) {
+        var idrFormat = dataIDR;
+        var parsedIDR = addCommas(idrFormat);
+
+
+        return "IDR" + " " + parsedIDR;
+    }
+
+    function formatClock(dataClock) {
+        var StartDateServer = dataClock;
+        var parsedDate = new Date(parseInt(StartDateServer.substr(6)));
+        var formatted = parsedDate.getHours() + ":" +
+            (parsedDate.getMinutes() < 10 ? '0' : '') + parsedDate.getMinutes();
+
+        return formatted;
+    }
+
+    function formatDate(dataDate) {
+        var StartDateServer = dataDate;
+        var parsedDate = new Date(parseInt(StartDateServer.substr(6)));
+        var formatted = ("0" + parsedDate.getDate()).slice(-2) + "-" + ("0" + (parsedDate.getMonth() + 1)).slice(-2) + "-" + parsedDate.getFullYear()
+
+        return formatted;
+    }
+
+     function dataRM() {
+        //var startDate = $('#date_from').val();
+        //var endDate = $('#date_to').val();
+
+         //var param = "Sdate=" + startDate + "&Edate=" + endDate + "&CustomerID=" + $("#DdlCustomer").val() + "&CompaniesID=" + $("#DdlCompanies").val() + "";
+
+         var GetData;
+         $.ajax({
+             async:false,
+                    url: "@Url.Action("RigMaterialReport", "RigMaterial")",
+                    type: 'GET',
+                    //data: { SubId: SubId, KategoriId: KategoriId, page: 1 },
+             success: function (result) {
+                 GetData = result;
+                 console.log(GetData['data'][1]);
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                });
+
+
+         var Html = '<table border="1" style="border-collapse: collapse; font-family=arial;">';
+         Html += '<h3 style="margin-left:50%"><p style="text-align:center"><b>Laporan Rekap Rig Movement / Mobilization</b></p></h3>';
+         Html += '<tr>';
+         Html += '<thead>';
+         Html += '<tr class="btn-primary">';
+         Html += '<th style="background-color:#337ab7" rowspan="2">No</th>';
+         Html += '<th style="background-color:#337ab7" rowspan="2">Area</th>';
+         Html += '<th style="background-color:#337ab7" rowspan="2">Rig</th>';
+         Html += '<th style="background-color:#337ab7" colspan="2">Rute</th>';
+         Html += '<th style="background-color:#337ab7" rowspan="2">Jarak (Km)</th>';
+         Html += '<th style="background-color:#337ab7" rowspan="2">Transporter</th>';
+         Html += '<th style="background-color:#337ab7" rowspan="2">Biaya</th>';
+         Html += '<th style="background-color:#337ab7" rowspan="2">Mulai (H-1 Moving)</th>';
+         Html += '<th style="background-color:#337ab7" rowspan="2">Jam</th>';
+         Html += '<th style="background-color:#337ab7" colspan="2">Target</th>';
+         Html += '<th style="background-color:#337ab7" rowspan="2">Hari Ke</th>';
+         Html += '<th style="background-color:#337ab7" rowspan="2">Daily Target</th>';
+         Html += '<th style="background-color:#337ab7" colspan="3">Move Out Kumulatif</th>';
+         Html += '<th style="background-color:#337ab7" colspan="3">Move In Kumulatif</th>';
+         Html += '</tr>';
+         Html += '<tr class="btn-primary">';
+         Html += '<th style="background-color:#337ab7">Dari</th>';
+         Html += '<th style="background-color:#337ab7">Ke</th>';
+         Html += '<th style="background-color:#337ab7">Hari PJP</th>';
+         Html += '<th style="background-color:#337ab7">Est Trip</th>';
+         Html += '<th style="background-color:#337ab7">Trip</th>';
+         Html += '<th style="background-color:#337ab7">Persentase</th>';
+         Html += '<th style="background-color:#337ab7">Penilaian</th>';
+         Html += '<th style="background-color:#337ab7">Trip</th>';
+         Html += '<th style="background-color:#337ab7">Persentase</th>';
+         Html += '<th style="background-color:#337ab7">Penilaian</th>';
+         Html += '</tr>';
+         Html += '</thead>';
+         Html += '</tr>';
+
+         for (i = 0; i < GetData['data'].length; i++) {
+
+             Html += '<tr>';
+             Html += '<td align="center">' + (i + 1) + '</td><td align="left">' + GetData['data'][i]['area'] + '</td><td align="left">' + GetData['data'][i]['rig'] + '</td><td align="left">' + GetData['data'][i]['rute_dari'] + '</td><td align="right">' + GetData['data'][i]['rute_ke'] + '</td><td align="right">' + GetData['data'][i]['jarak'] + '</td><td align="right">' + GetData['data'][i]['transporter'] + '</td><td align="right">' + formatIDR(GetData['data'][i]['biaya']) + '</td><td align="center">' + formatDate(GetData['data'][i]['tanggal_mulai']) + '</td>' + '</td><td align="center">' + formatClock(GetData['data'][i]['tanggal_mulai']) + '</td><td>' + GetData['data'][i]['target_hari'] + '</td><td>' + GetData['data'][i]['target_trip'] + '</td><td>' + GetData['data'][i]['harike'] + '</td> <td> ' + persentase(GetData['data'][i]['DailyTargetMoveOut']) + ' </td> <td > ' + GetData['data'][i]['trip'] + '</td><td>' + persentase(GetData['data'][i]['persentase2']) + '</td><td>' + GetData['data'][i]['penilaian1'] + '</td><td>' + GetData['data'][i]['tripMoveIn'] + '</td><td>' + persentase(GetData['data'][i]['persentaseMoveIn2']) + '</td><td>' + GetData['data'][i]['penilaian2'] + '</td>';
+            Html += '</tr>';
+
+        }
+
+        return Html
+
+    }
+
+
+    function exportToExcel() {
+         DownloadExcell(dataRM(), "Report Rig Material" );
+    }
+
+    function DownloadExcell(HtmlData, FileName) {
+        //window.open('data:application/vnd.ms-excel,' + encodeURIComponent(html));
+
+        var uri = 'data:application/vnd.ms-excel;base64,';
+        var template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>';
+        var base64 = function (s) {
+            return window.btoa(unescape(encodeURIComponent(s)))
+        };
+
+        var format = function (s, c) {
+            return s.replace(/{(\w+)}/g, function (m, p) {
+                return c[p];
+            })
+        };
+
+        var ctx = {
+            worksheet: 'Worksheet',
+            table: HtmlData
+        }
+
+        var link = document.createElement("a");
+        link.download = FileName + ".xls";
+        link.href = uri + base64(format(template, ctx));
+        link.click();
+
+    }
+
+
+    function deleteTransporter(ID) {
 
         if (confirm("Are you sure you want to delete this data?")) {
             var delData = {
@@ -310,8 +469,8 @@
     }
     function FilterPermintaanPekerjaan() {
 
-       
-         var hostname = location.pathname;
+
+    var hostname = location.pathname;
 	var res = hostname.replace("/RigMaterialList", "");
 	var full = res + '/EditExisting'
     var full2 =  location.protocol + '//' + /:\/\/([^\/]+)/.exec(window.location.href)[1] + '~/RigMaterial/DeleteRigMaterial';

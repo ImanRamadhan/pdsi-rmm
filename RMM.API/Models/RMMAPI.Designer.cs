@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'D:\DATA IMAN\SOURCE CODE\Rig Movement\RMM.API\Models\RMMAPI.edmx'. 
+﻿// T4 code generation is enabled for model 'D:\pdsi-rmm\RMM.API\Models\RMMAPI.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

@@ -18,8 +18,9 @@ namespace RigMaterialMovementWeb.Models
 
     public class DDLArea
     {
-        public string 
-            id { get; set; }
+        public string
+            id
+        { get; set; }
         public string name { get; set; }
     }
 
@@ -29,9 +30,9 @@ namespace RigMaterialMovementWeb.Models
         public string name { get; set; }
     }
     public class RigMaterialMovementList
-    { 
+    {
         public List<DDLTransporter> DDLTransporter { get; set; }
-      public string penilaian2 { get; set; }
+        public string penilaian2 { get; set; }
         public string penilaian1 { get; set; }
         public int tripMoveIn { get; set; }
         public decimal? DailyTargetMoveOut { get; set; }

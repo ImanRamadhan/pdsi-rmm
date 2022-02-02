@@ -9,7 +9,28 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Pengangkutan Material Rig</title>
+
 </head>
+<style>
+    .contain {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        padding-top: 56.25%;
+        /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
+    }
+
+    /* Then style the iframe to fit in the container div with full height and width */
+    .responsive-iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+    }
+</style>
 <body>
     <input type="hidden" name="id" id="txtapproval" value="@ViewBag.approval[0].role_id" />
     <div id="myModal" class="modal fade" role="dialog">
@@ -117,45 +138,45 @@
                 <div class="form-group">
 
                     @*<div class="row col-lg-7" style="margin-top:1%">
-            <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">No. WO</label>
+                            <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">No. WO</label>
 
-            <input id="txtwosrc" name="tanggal" class="form-control input-sm" type="text" />
-        </div>
+                            <input id="txtwosrc" name="tanggal" class="form-control input-sm" type="text" />
+                        </div>
 
-        <div class="row col-lg-7" style="margin-top:1%">
-            <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">No. Activity</label>
+                        <div class="row col-lg-7" style="margin-top:1%">
+                            <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">No. Activity</label>
 
-            <input id="txtactivitysrc" name="tanggal" class="form-control input-sm" type="text" />
-        </div>
-        <div class="row col-lg-7" style="margin-top:1%">
-            <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">Judul Pekerjaan</label>
+                            <input id="txtactivitysrc" name="tanggal" class="form-control input-sm" type="text" />
+                        </div>
+                        <div class="row col-lg-7" style="margin-top:1%">
+                            <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">Judul Pekerjaan</label>
 
-            <input id="txtjudulsrc" name="tanggal" class="form-control input-sm" type="text" />
-        </div>
-        <div class="row col-lg-7" style="margin-top:1%">
-            <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">Lokasi Asal</label>
+                            <input id="txtjudulsrc" name="tanggal" class="form-control input-sm" type="text" />
+                        </div>
+                        <div class="row col-lg-7" style="margin-top:1%">
+                            <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">Lokasi Asal</label>
 
-            <input id="txtlokasiasalsrc" name="tanggal" class="form-control input-sm" type="text" />
+                            <input id="txtlokasiasalsrc" name="tanggal" class="form-control input-sm" type="text" />
 
-        </div>
-        <div class="row col-lg-7" style="margin-top:1%">
-            <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">Lokasi Tujuan</label>
+                        </div>
+                        <div class="row col-lg-7" style="margin-top:1%">
+                            <label for="txtNilai" class="col-sm-2 control-label" style="margin-right:80px">Lokasi Tujuan</label>
 
-            <input id="txtlokasitujuansrc" name="tanggal" class="form-control input-sm" type="text" />
+                            <input id="txtlokasitujuansrc" name="tanggal" class="form-control input-sm" type="text" />
 
-        </div>
-        <div class="row col-lg-7" style="margin-top:1%">
-            <label class="col-lg-3" style="margin-right:4%">Status</label>
+                        </div>
+                        <div class="row col-lg-7" style="margin-top:1%">
+                            <label class="col-lg-3" style="margin-right:4%">Status</label>
 
-            <select class="form-control input-sm" name="ST" id="ddlstatussrc">
-                <option value=""> </option>
-                @foreach (var item in ViewBag.statussrc)
-                {
-                    <option value="@item.id">@item.name</option>
+                            <select class="form-control input-sm" name="ST" id="ddlstatussrc">
+                                <option value=""> </option>
+                                @foreach (var item in ViewBag.statussrc)
+                                {
+                                    <option value="@item.id">@item.name</option>
 
-                }
-            </select>
-        </div>*@
+                                }
+                            </select>
+                        </div>*@
 
                     <div class="row col-lg-6 " style="margin-top:1%">
                         <label class="col-lg-3" style="margin-right:2%">Tanggal Mulai</label>
@@ -187,6 +208,7 @@
             <div class="form-horizontal">
                 <br />
                 <button onclick="OpenModal()" type="button" class="btn btn-sm btn-success" style="background-color:#a6c218; border-color:#a6c218"><i class="glyphicon glyphicon-file"></i>Create New</button>
+                <button id="btnexport" onclick="exportToExcel();" type="button" class="btn btn-sm btn-primary">Export to Excell&nbsp;<i class="glyphicon glyphicon-file"></i></button>
 
             </div>
             <div class="panel panel-default">
@@ -197,17 +219,6 @@
                                 <tr>
 
                                     <th>No.</th>
-                                    @{ var role = ViewBag.approval[0].role_id;
-                                        if (role == 1 || role == 3)
-                                        {
-                                            <th>CRUD</th>
-                                        }
-                                        else
-                                        {
-
-                                        }
-
-                                    }
                                     <th>No. WO</th>
                                     <th>Activity No.</th>
                                     <th>Judul Pekerjaan</th>
@@ -225,7 +236,7 @@
                                         }
                                         else
                                         {
-
+                                            <th>CRUD</th>
                                         }
 
                                     }
@@ -249,14 +260,14 @@
 <script>
 
     $(document).ready(function () {
-  
+
         $("#txttglpekerjaansrcstart").datepicker({
-          
+
         });
         $("#txttglpekerjaansrcend").datepicker({
-         
+
         });
-       
+
     var hostname = location.pathname;
     var res = hostname.replace("/PermintaanPekerjaanList", "");
     var full = res + '/PermintaanPekerjaanDetail'
@@ -309,15 +320,17 @@
                         "data": 'status',
                         "render": function (data, type, row, meta) {
                             if (data == "Completed") {
-                                return '<button type="button" class="btn btn-success hidden"><span class="fa fa-check"></span></button>';
+                                return '<button type="button" class="btn btn-success hidden"><span class="fa fa-check"></span></button>' +
+                                    '<button type="button" class="btn btn-info" onclick="excellFrame(' + row.id + ')"><i class="fa fa-search"></i></button>';;
                             }
                             else {
-                                return '<a href="' + full2 + "?param=" + row.id + '"><button type="button" class="btn btn-success"><span class="fa fa-check"></span></button></a>';
-                              
+                                return '<a href="' + full2 + "?param=" + row.id + '"><button type="button" class="btn btn-success"><span class="fa fa-check"></span></button></a>' +
+                                    '<button type="button" class="btn btn-info" onclick="excellFrame(' + row.id + ')"><i class="fa fa-search"></i></button>';;
+
                             }
                         }
                     },
-                  
+
                 ],
                 dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
                     "<'row'<'col-sm-12'tr>>" +
@@ -333,7 +346,7 @@
                 });
             }).draw();
         }
-         
+
            @*if (role == 3) {
             var grid = $('#grid').DataTable({
                 ajax: {
@@ -415,17 +428,7 @@
                             "orderable": false,
 
                         },
-                        {
-                            "data": "id",
-                            "render": function (data, type, full) {
-                                if (full.status == "On Progress") {
-                                    return '<button type="button" class="btn btn-success" onclick="editTransporterasda(' + full.id + ')"><span class="fa fa-pencil"></span></button>&nbsp;&nbsp;' +
-                                        ' <button type="button" class="btn btn-danger" onclick="deleteTransporter(' + full.id + ')"><i class="fa fa-trash-o"></i></button>'
-                                } else {
-                                    return '<button type="button" class="btn btn-danger" onclick="deleteTransporter(' + full.id + ')"><i class="fa fa-trash-o"></i></button>'
-                                }
-                            }
-                        },
+
                         {
                             "data": 'no_wo',
                             "render": function (data, type, row, meta) {
@@ -449,6 +452,19 @@
                         { "data": 'approved_by' },
                         { "data": 'last_modified_by' },
                         { "data": 'finished_by' },
+                        {
+                            "data": "id",
+                            "render": function (data, type, full) {
+                                if (full.status == "On Progress") {
+                                    return '<button type="button" class="btn btn-success" onclick="editTransporterasda(' + full.id + ')"><span class="fa fa-pencil"></span></button>&nbsp;&nbsp;' +
+                                        ' <button type="button" class="btn btn-danger" onclick="deleteTransporter(' + full.id + ')"><i class="fa fa-trash-o"></i></button>' +
+                                        '<button type="button" class="btn btn-info" onclick="excellFrame(' + full.id + ')"><i class="fa fa-search"></i></button>';
+                                } else {
+                                    return '<button type="button" class="btn btn-danger" onclick="deleteTransporter(' + full.id + ')"><i class="fa fa-trash-o"></i></button>' +
+                                        '<button type="button" class="btn btn-info" onclick="excellFrame(' + full.id + ')"><i class="fa fa-search"></i></button>';
+                                }
+                            }
+                        }
 
                     ],
                     dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
@@ -520,9 +536,10 @@
                         "data": 'status',
                         "render": function (data, type, row, meta) {
                             if (data == "On Progress") {
-                                return '<button type="button" class="btn btn-success" onclick="editTransporterWahoo(' + row.id + ')"><span class="fa fa-check"></span></button>&nbsp;&nbsp;';
+                                return '<button type="button" class="btn btn-success" onclick="editTransporterWahoo(' + row.id + ')"><span class="fa fa-check"></span></button>&nbsp;&nbsp;' +
+                                    '<button type="button" class="btn btn-info" onclick="excellFrame(' + row.id + ')"><i class="fa fa-search"></i></button>';
                             } else {
-                                return '';
+                                return '<button type="button" class="btn btn-info" onclick="excellFrame(' + row.id + ')"><i class="fa fa-search"></i></button>';
                             }
                         }
                     },
@@ -545,6 +562,97 @@
         }
     });
 
+    function formatFinal(date) {
+        var StartDateServer = date;
+        var parsedDate = new Date(parseInt(StartDateServer.substr(6)));
+        var finalDate = parsedDate.toLocaleDateString('en-GB'); //result as mm/dd/yyyy
+        return finalDate;
+    }
+    function excellFrame(ID) {
+        let url = "https://pdsi.pertamina.com/bisnis-kami#produk-jasa";
+        var win = window.open();
+        win.document.write('<div style="position: relative;overflow: hidden;width: 100%;padding-top: 56.25%;"><iframe style="position: absolute;top: 0;left: 0;bottom: 0;right: 0;width: 100%;height: 100%;" src="'+ url +'" frameborder="0" allowfullscreen></iframe></div>')
+    }
+    function dataPM() {
+        var GetData;
+         $.ajax({
+             async:false,
+                    url: "@Url.Action("PermintaanPekerjaan", "PermintaanPekerjaan")",
+                    type: 'GET',
+                    //data: { SubId: SubId, KategoriId: KategoriId, page: 1 },
+             success: function (result) {
+                 GetData = result;
+                 console.log(GetData['data'][0]);
+                    },
+                    error: function (err) {
+                        alert(err);
+                    }
+                });
+
+
+        var Html = '<table border="1" style="border-collapse: collapse; font-family=arial;">';
+        Html += '<h3 style="margin-left:50%"><p style="text-align:center"><b>Laporan Pengangkutan Material RIG</b></p></h3>';
+        Html += '<tr>';
+        Html += '<thead>';
+        Html += '<tr class="btn-primary">>';
+        Html += '<th style="background-color:#337ab7">No.</th>';
+        Html += '<th style="background-color:#337ab7">No. WO</th>';
+        Html += '<th style="background-color:#337ab7">Activity No.</th>';
+        Html += '<th style="background-color:#337ab7">Judul Pekerjaan</th>';
+        Html += '<th style="background-color:#337ab7">Lokasi Asal</th>';
+        Html += '<th style="background-color:#337ab7">Lokasi Tujuan</th>';
+        Html += '<th style="background-color:#337ab7">Tanggal Pekerjaan</th>';
+        Html += '<th style="background-color:#337ab7">Status</th>';
+        Html += '<th style="background-color:#337ab7">Disetujui Oleh</th>';
+        Html += '<th style="background-color:#337ab7">Dibuat Oleh</th>';
+        Html += '<th style="background-color:#337ab7">Diselesaikan Oleh</th>';
+        Html += '</tr>';
+        Html += '</thead>';
+        Html += '</tr>';
+
+         for (i = 0; i < GetData['data'].length; i++) {
+
+             Html += '<tr>';
+             Html += '<td align="center">' + (i + 1) + '</td><td align="left">' + GetData['data'][i]['no_wo'] + '</td><td align="left">' + GetData['data'][i]['no_activity'] + '</td><td align="left">' + GetData['data'][i]['judul_pekerjaan'] + '</td><td align="right">' + GetData['data'][i]['lokasi_asal'] + '</td><td align="right">' + GetData['data'][i]['lokasi_tujuan'] + '</td><td align="right">' + formatFinal(GetData['data'][i]['tanggal_pekerjaan']) + '</td><td align="right">' + GetData['data'][i]['status'] + '</td><td align="center">' + GetData['data'][i]['approved_by'] + '</td>' + '</td><td align="center">' + GetData['data'][i]['last_modified_by'] + '</td><td>' + GetData['data'][i]['finished_by'] + '</td>';
+             Html += '</tr>';
+
+        }
+
+        return Html
+    }
+
+    function exportToExcel() {
+        DownloadExcell(dataPM(), "Report Pengangkutan Material RIG");
+    }
+
+    function DownloadExcell(HtmlData, FileName) {
+        //window.open('data:application/vnd.ms-excel,' + encodeURIComponent(html));
+
+        var uri = 'data:application/vnd.ms-excel;base64,';
+        var template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>';
+        var base64 = function (s) {
+            return window.btoa(unescape(encodeURIComponent(s)))
+        };
+
+        var format = function (s, c) {
+            return s.replace(/{(\w+)}/g, function (m, p) {
+                return c[p];
+            })
+        };
+
+        var ctx = {
+            worksheet: 'Worksheet',
+            table: HtmlData
+        }
+
+        var link = document.createElement("a");
+        link.download = FileName + ".xls";
+        link.href = uri + base64(format(template, ctx));
+        link.click();
+
+    }
+
+
      function Approve() {
      var UrlEditStatus = '@Url.Action("EditPermintaanPekerjaanStatusApprove" ,"PermintaanPekerjaan")';
 
@@ -562,11 +670,11 @@
                     $.ajax({
                         success: function (Result) {
 
-                          
+
                         },
                         error: function (event, textStatus, errorThrown) {
 
-                          
+
                         }
                     })
                 } else {

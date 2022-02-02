@@ -256,7 +256,9 @@ function EditRigMovement() {
     }
 }
 function SaveParent() {
-     
+    let biaya = $('#txtbiaya').val();
+    let newBiaya = biaya.replace(/\,/g, '');
+
     var hostname = location.pathname;
     var res = hostname.replace("/Edit", "");
     var full = res + '/RigMaterialList'
@@ -273,7 +275,7 @@ function SaveParent() {
             target_hari: $('#txtharipjp').val(),
             target_trip: $('#txttrip').val(),
             tanggal_mulai: $('#txttanggal2').val(),
-            biaya: $('#txtbiaya').val(),
+            biaya: newBiaya,
             test_tanggal_move: $('#txttanggal2').val()
         }
          
